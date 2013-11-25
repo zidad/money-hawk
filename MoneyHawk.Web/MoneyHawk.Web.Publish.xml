@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="https://netindustry.nl:8172/MsDeploy.axd" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="MoneyHawk" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="True" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="True" profileName="Profile1" publishMethod="MSDeploy" replaceMatchingFiles="True" userName="trc\wiebe" savePWD="True" userPWD="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA2WDTIcOECk6DNdDXpSrZZgAAAAACAAAAAAAQZgAAAAEAACAAAAB1GFX+8TiOx5kGJtEu5lIPTF9oYHWIXHLSNvW05fn3iAAAAAAOgAAAAAIAACAAAACEE2pSdHibniC71lwGNlZHlRdOUi0KsZ6lh/WKYy3oOSAAAADe9mi9Ayaoem6Q2DfI1Iv+3bZ946glvwlUO9b8pJebekAAAAD5p6LwQ+s16TW5BHq7pyh2iwCdgC3o5LAtzka9wGAYo+650OgHi78sDxfvC4KFNW5bLNG6oUYdHy9hSkI/GnaX" SelectedForPublish="True" />
+</publishData>

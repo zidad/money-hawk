@@ -1,0 +1,17 @@
+﻿@model IEnumerable<MoneyHawk.Core.Invoices.Invoice>
+
+@{
+    ViewBag.Title = "Invoices";
+}
+
+@{
+    var grid = new WebGrid(source:Model); 
+}
+
+<div id="grid">
+    @grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt"
+    )
+</div>
