@@ -1,20 +1,21 @@
-﻿@using MoneyHawk.Web.Controllers
-@using MoneyHawk.Web.Models
-@using MoneyHawk.Core
-@using Resources
-@model List<ExpenseLine>
+﻿@model List<expenseline>
 
-@{
-    ViewBag.Title = "Expense report";
-    Layout = "../Shared/DataOnly.cshtml";
-  }
+    @using MoneyHawk.Web.Controllers
+    @using MoneyHawk.Web.Models
+    @using MoneyHawk.Core
+    @using Resources
 
-@{
-    var grid = new WebGrid<ExpenseLine>(source:Model, rowsPerPage:200);     
-}
+    @{
+        ViewBag.Title = "Expense report";
+        Layout = "../Shared/DataOnly.cshtml";
+    }
 
-<div id="grid">
-    @grid.GetHtml(
+    @{
+        var grid = new WebGrid<ExpenseLine>(source: Model, rowsPerPage: 200);
+    }
+
+    <div id="grid">
+        @grid.GetHtml(
         tableStyle: "grid",
         headerStyle: "head",
         alternatingRowStyle: "alt",
@@ -35,4 +36,4 @@
                     grid.Col("Price", "Price", line => line.Detail.Price.ToString("0.00"))
             )
         )
-</div>
+    </div>

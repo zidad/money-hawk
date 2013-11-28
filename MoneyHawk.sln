@@ -10,15 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{11C6D2
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Web", "MoneyHawk.Web\MoneyHawk.Web.csproj", "{C4E7ADFB-B80E-471A-8ADA-D33D34C605F5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Core", "MoneyHawk.Core\MoneyHawk.Core.csproj", "{F4184561-91B5-4108-8EA6-4A6D40912532}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetIndustry.Library.Core", "..\VindCreatieven\Main\Source\NetIndustry.Library.Core\NetIndustry.Library.Core.csproj", "{05D48ED9-E61F-4E5B-B671-423EC1E06B98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Data", "MoneyHawk.Data\MoneyHawk.Data.csproj", "{71B20249-5951-4EEB-8D7B-41F1CF195E17}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MoneyHawk.Db", "MoneyHawk.Db\MoneyHawk.Db.sqlproj", "{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Web.Mvc", "MoneyHawk.Web.Mvc\MoneyHawk.Web.Mvc.csproj", "{6522AB80-CAE5-489E-96D3-9134CC28145A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C4E7ADFB-B80E-471A-8ADA-D33D34C605F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4E7ADFB-B80E-471A-8ADA-D33D34C605F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4E7ADFB-B80E-471A-8ADA-D33D34C605F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4E7ADFB-B80E-471A-8ADA-D33D34C605F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F4184561-91B5-4108-8EA6-4A6D40912532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F4184561-91B5-4108-8EA6-4A6D40912532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4184561-91B5-4108-8EA6-4A6D40912532}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,16 +30,10 @@ Global
 		{05D48ED9-E61F-4E5B-B671-423EC1E06B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05D48ED9-E61F-4E5B-B671-423EC1E06B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05D48ED9-E61F-4E5B-B671-423EC1E06B98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71B20249-5951-4EEB-8D7B-41F1CF195E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71B20249-5951-4EEB-8D7B-41F1CF195E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71B20249-5951-4EEB-8D7B-41F1CF195E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71B20249-5951-4EEB-8D7B-41F1CF195E17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7ABCBCC-CED0-48E0-8BF1-64B6E5BCEF6D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
