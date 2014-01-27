@@ -26,6 +26,7 @@ namespace MoneyHawk.Web.Mvc.Migrations
                         SecurityStamp = c.String(),
                         MoneyBirdUserName = c.String(),
                         MoneyBirdAccountName = c.String(),
+                        MoneyBirdPassword = c.String(),
                         Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.Id);

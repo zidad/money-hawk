@@ -1,6 +1,7 @@
 ﻿@using MoneyHawk.Web.Controllers
 @using MoneyHawk.Core
 @using MoneyHawk.Web.Mvc.Controllers
+@using Net.System
 @model List<MoneyHawk.Web.Mvc.Controllers.ExpenseLine>
 
 @{
@@ -18,12 +19,12 @@
         headerStyle: "head",
         alternatingRowStyle: "alt",
         columns: grid.Columns(
-                    grid.Col("InvoiceDate", "Datum", line => line.Expense.InvoiceDate.ToString("d")),
+                    grid.Col("InvoiceDate", "Datum", line => line.Expense.InvoiceDate.To<String>("d")),
                     grid.Col("Description", "Naam", line => line.Detail.Description),
-                    grid.Col("Price Inc", "incl btw", line => line.Detail.TotalPriceInclTax.ToString("0.00")),
-                    grid.Col("Tax", "%", line => line.Detail.Tax.ToString("0 %")),
-                    grid.Col("Price Ex", "ex", line => line.Detail.TotalPriceExclTax.ToString("0.00")),
-                    grid.Col("TaxAmount", "btw", line => (line.Detail.TotalPriceInclTax - line.Detail.TotalPriceExclTax).ToString("0.00")),
+                    grid.Col("Price Inc", "incl btw", line => line.Detail.TotalPriceInclTax.To<String>("0.00")),
+                    grid.Col("Tax", "%", line => line.Detail.Tax.To<String>("0 %")),
+                    grid.Col("Price Ex", "ex", line => line.Detail.TotalPriceExclTax.To<String>("0.00")),
+                    grid.Col("TaxAmount", "btw", line => (line.Detail.TotalPriceInclTax - line.Detail.TotalPriceExclTax).To<String>("0.00")),
                     grid.Col("Kind1", "soort", line => line.Type1),
                     grid.Col("Kind2", "soort", line => line.Type2),
                     grid.Col("Invoice", "factuurnummer", line => line.Expense.InvoiceId),
@@ -31,7 +32,7 @@
                     grid.Col("Contact", "contact naam", line => line.Contact.Name),
                     grid.Col("LedgerId", "grootboekrekening", line => line.Ledger.LedgerAccountId),
                     grid.Col("Ledger", "Ledger", line => line.Ledger.Name),
-                    grid.Col("Price", "Price", line => line.Detail.Price.ToString("0.00"))
+                    grid.Col("Price", "Price", line => line.Detail.Price.To<String>("0.00"))
             )
         )
 </div>

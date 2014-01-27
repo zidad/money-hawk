@@ -7,6 +7,7 @@ using Microsoft.Owin.Security;
 using MoneyHawk.Core;
 using MoneyHawk.Web.Controllers;
 using MoneyHawk.Web.Mvc.Models;
+using Net.Text;
 
 namespace MoneyHawk.Web.Mvc.Controllers
 {
@@ -26,7 +27,7 @@ namespace MoneyHawk.Web.Mvc.Controllers
             var password = user.MoneyBirdPassword;
             var subdomain = user.MoneyBirdAccountName;
 
-            if (username.HasNoData() || password.HasNoData() || subdomain.HasNoData())
+            if (username.HasNoValue() || password.HasNoValue() || subdomain.HasNoValue())
                 throw new Exception("Missing data account, please log in");
 
             return new CachedMoneyBirdApi(new MoneyBirdApi(subdomain, username, password));

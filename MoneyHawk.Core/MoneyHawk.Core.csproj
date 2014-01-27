@@ -93,6 +93,12 @@
     <Folder Include="Recurring\" />
     <Folder Include="Reports\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Net.Tools\src\Net.Core\Net.Core.csproj">
+      <Project>{bba0a9e7-2819-4ada-94db-bf5f3c5a6e1e}</Project>
+      <Name>Net.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

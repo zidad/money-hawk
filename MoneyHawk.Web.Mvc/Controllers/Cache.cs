@@ -12,17 +12,21 @@ namespace MoneyHawk.Web.Controllers
 
         public void Add(string key, object value)
         {
-            this.cache.Add(key, value, this.policy);
+            if (value == null) throw new ArgumentNullException("value", "value missing for key: " + key);
+            cache.Add(key, value, this.policy);
         }
 
         public T GetOrAdd<T>(string key, Func<T> initializer) where T : class
         {
             T result;
-            if (!this.cache.Contains(key) || (result = (T)this.cache.Get(key)) == null)
-            {
-                result = initializer();
-                this.Add(key, result);
-            }
+            
+            if (cache.Contains(key) && (result = (T) cache.Get(key)) != null) 
+                return result;
+            
+            result = initializer();
+            
+            Add(key, result);
+            
             return result;
         }
     }

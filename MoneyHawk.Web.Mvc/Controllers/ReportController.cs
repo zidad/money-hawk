@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using MoneyHawk.Core;
-using NetIndustry.Library;
+using Net.Collections;
+using Net.Text;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 
 namespace MoneyHawk.Web.Mvc.Controllers
 {
@@ -29,7 +28,7 @@ namespace MoneyHawk.Web.Mvc.Controllers
                 .SelectMany(incomingInvoice => incomingInvoice.Details.Select(x => new { Expense = incomingInvoice, Detail = x }))
                 .Where(e => e.Expense.ContactId.HasValue && e.Detail.LedgerAccountId.HasValue);
 
-            var contacts = this.GetContacts();
+            var contacts = GetContacts();
             var ledgerAccounts = api.LedgerAccounts.GetAll();
 
             var lines = from expense in invoiceLines
