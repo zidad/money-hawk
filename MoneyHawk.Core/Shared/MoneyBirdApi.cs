@@ -1,29 +1,34 @@
 using System;
-using RestSharp;
+using ServiceStack;
+using ServiceStack.Common;
 
 namespace MoneyHawk.Core
 {
     public class MoneyBirdApi : IMoneyBirdApi
     {
-        private readonly IRestClient client;
+        private readonly JsonServiceClient client;
 
         public MoneyBirdApi(string subDomain, string username, string password)
             : this(CreateDefaultRestClient(subDomain, username, password))
         {
         }
 
-        public MoneyBirdApi(string subDomain, string accessToken)
-            : this(CreateAuthRestClient(subDomain, accessToken))
-        {
-        }
-
-        public MoneyBirdApi(IRestClient client)
+        /*
+                public MoneyBirdApi(string subDomain, string accessToken)
+                    : this(CreateAuthRestClient(subDomain, accessToken))
+                {
+                }
+*/
+        public MoneyBirdApi(JsonServiceClient client)
         {
             this.client = client;
         }
+        
 
-        private static RestClient CreateDefaultRestClient(string subDomain, string username, string password)
+        private static JsonServiceClient CreateDefaultRestClient(string subDomain, string username, string password)
         {
+            var client = new JsonServiceClient("https://" + subDomain + ".moneybird.nl/api/v1.0");
+            
             var restRequest = new RestRequest();
             
             new RestClient().Get(restRequest);
@@ -36,13 +41,13 @@ namespace MoneyHawk.Core
             //return new RestClient { BaseUrl = "https://" + subDomain + ".moneybird.nl/api/v1.0", Authenticator = new OAuth1Authenticator(){} };
             return new RestClient { BaseUrl = "https://" + subDomain + ".moneybird.nl/api/v1.0", Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(accessToken) };
         }
-*/
+
         private static RestClient CreateAuthRestClient(string subDomain, string accessToken)
         {
             //return new RestClient { BaseUrl = "https://" + subDomain + ".moneybird.nl/api/v1.0", Authenticator = new OAuth1Authenticator(){} };
             return new RestClient { BaseUrl = "https://" + subDomain + ".moneybird.nl/api/v1.0", Authenticator = new OAuth2UriQueryParameterAuthenticator(accessToken) };
         }
-
+*/
 
         public InvoiceDataSource Invoices 
         {
