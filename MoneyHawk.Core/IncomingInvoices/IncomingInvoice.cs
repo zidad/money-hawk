@@ -45,7 +45,7 @@ namespace MoneyHawk.Core
         [DataMember(Name = "price_incl_tax")]
         public decimal? PriceInclTax { get; set; }
         ///price-tax	Decimal	No	Total price tax for incoming invoice. Only needed if you don't use incoming invoice details.
-        [DataMember(Name = "price-tax")]
+        [DataMember(Name = "price_tax")]
         public decimal? PriceTax { get; set; }
         ///revision	Integer	No	Read-only, incremental integer, increases if incoming invoice is updated
         [DataMember(Name = "revision")]
@@ -60,6 +60,7 @@ namespace MoneyHawk.Core
         [DataMember(Name = "total_unpaid")]
         public decimal? TotalUnpaid { get; set; }
         ///updated-at	Datetime	No	Read-only, for example: 2011-02-15T13:13:50+01:00
+        [DataMember(Name = "updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
         [DataMember(Name="attachments")]
