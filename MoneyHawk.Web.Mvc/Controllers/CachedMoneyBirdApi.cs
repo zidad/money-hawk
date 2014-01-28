@@ -48,24 +48,24 @@ namespace MoneyHawk.Web.Controllers
             }
         }
 
-        public T Get<T>(string url) where T : class, new()
+        public T Get<T>(string url) where T : class
         {
-            return this.cache.GetOrAdd(url, () => this.moneyBirdApi.Get<T>(url));
+            return cache.GetOrAdd(url, () => this.moneyBirdApi.Get<T>(url));
         }
 
         public T Put<T>(string url, T data) where T : class
         {
-            return this.moneyBirdApi.Put(url, data);
+            return moneyBirdApi.Put(url, data);
         }
 
         public T Post<T>(string url, T data) where T : class
         {
-            return this.moneyBirdApi.Post(url, data);
+            return moneyBirdApi.Post(url, data);
         }
 
         public T Delete<T>(string url, T data) where T : class
         {
-            return this.moneyBirdApi.Delete(url, data);
+            return moneyBirdApi.Delete(url, data);
         }
     }
 }

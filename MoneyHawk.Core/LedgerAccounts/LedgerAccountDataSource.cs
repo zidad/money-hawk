@@ -21,8 +21,9 @@ namespace MoneyHawk.Core
         // Get all invoices GET /api/v1.0/ledger_accounts.xml
         public override IEnumerable<LedgerAccount> GetAll()
         {
-            var ledgerAccountList = this.api.Get<List<LedgerAccount>>("ledger_accounts.xml");
-
+            var ledgerAccountWrappers = api.Get<LedgerAccountWrapper[]>("ledger_accounts.json");
+            var ledgerAccounts = ledgerAccountWrappers.Select(l=>l.LedgerAccount);
+            var ledgerAccountList = ledgerAccounts.ToArray();
             return ledgerAccountList;
         }
     }

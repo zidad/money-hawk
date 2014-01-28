@@ -59,6 +59,6 @@ namespace MoneyHawk.Core.Invoices
         public decimal? TotalUnpaid { get; set; }
         public List<InvoicePayment> Payments { get; set; }
         public List<History> History { get; set; }
-        public List<Detail> Details { get; set; }
+        public List<Details> Details { get; set; }
     }
 }

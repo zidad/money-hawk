@@ -22,7 +22,7 @@ namespace MoneyHawk.Core
         /// Get all contacts GET /api/v1.0/contacts.xml
         public override IEnumerable<Contact> GetAll()
         {
-            return api.Get<List<Contact>>("contacts.xml");
+            return api.Get<ContactWrapper[]>("contacts.json").Select(c=>c.Contact);
         }
     }
 }

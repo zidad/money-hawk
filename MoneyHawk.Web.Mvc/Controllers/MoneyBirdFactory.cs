@@ -33,6 +33,7 @@ namespace MoneyHawk.Web.Mvc.Controllers
             return new CachedMoneyBirdApi(new MoneyBirdApi(subdomain, username, password));
         }
         
+/*
         public static IMoneyBirdApi GetInstanceOAuth()
         {
             const string subdomain = "net-industry";
@@ -40,5 +41,6 @@ namespace MoneyHawk.Web.Mvc.Controllers
             
             return new MoneyBirdApi(subdomain, oAuthToken);
         }
+*/
     }
 }

@@ -20,11 +20,11 @@
         alternatingRowStyle: "alt",
         columns: grid.Columns(
                     grid.Col("InvoiceDate", "Datum", line => line.Expense.InvoiceDate.To<String>("d")),
-                    grid.Col("Description", "Naam", line => line.Detail.Description),
-                    grid.Col("Price Inc", "incl btw", line => line.Detail.TotalPriceInclTax.To<String>("0.00")),
-                    grid.Col("Tax", "%", line => line.Detail.Tax.To<String>("0 %")),
-                    grid.Col("Price Ex", "ex", line => line.Detail.TotalPriceExclTax.To<String>("0.00")),
-                    grid.Col("TaxAmount", "btw", line => (line.Detail.TotalPriceInclTax - line.Detail.TotalPriceExclTax).To<String>("0.00")),
+                    grid.Col("Description", "Naam", line => line.Details.Description),
+                    grid.Col("Price Inc", "incl btw", line => line.Details.TotalPriceInclTax.To<String>("0.00")),
+                    grid.Col("Tax", "%", line => line.Details.Tax.To<String>("0 %")),
+                    grid.Col("Price Ex", "ex", line => line.Details.TotalPriceExclTax.To<String>("0.00")),
+                    grid.Col("TaxAmount", "btw", line => (line.Details.TotalPriceInclTax - line.Details.TotalPriceExclTax).To<String>("0.00")),
                     grid.Col("Kind1", "soort", line => line.Type1),
                     grid.Col("Kind2", "soort", line => line.Type2),
                     grid.Col("Invoice", "factuurnummer", line => line.Expense.InvoiceId),
@@ -32,7 +32,7 @@
                     grid.Col("Contact", "contact naam", line => line.Contact.Name),
                     grid.Col("LedgerId", "grootboekrekening", line => line.Ledger.LedgerAccountId),
                     grid.Col("Ledger", "Ledger", line => line.Ledger.Name),
-                    grid.Col("Price", "Price", line => line.Detail.Price.To<String>("0.00"))
+                    grid.Col("Price", "Price", line => line.Details.Price.To<String>("0.00"))
             )
         )
 </div>

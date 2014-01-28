@@ -1,1 +1,1 @@
-msbuild /p:Configuration="Debug" /p:VisualStudioVersion=12.0
+msbuild /p:Configuration="Debug" 

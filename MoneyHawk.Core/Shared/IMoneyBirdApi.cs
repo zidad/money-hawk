@@ -10,7 +10,7 @@ namespace MoneyHawk.Core
 
         ContactDataSource Contacts { get; }
 
-        T Get<T>(string url) where T : class, new();
+        T Get<T>(string url) where T : class;
 
         T Put<T>(string url, T data) where T : class;
 

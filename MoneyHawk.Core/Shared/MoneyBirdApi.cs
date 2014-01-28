@@ -6,7 +6,7 @@ namespace MoneyHawk.Core
 {
     public class MoneyBirdApi : IMoneyBirdApi
     {
-        private readonly JsonServiceClient client;
+        private readonly ServiceClientBase client;
 
         public MoneyBirdApi(string subDomain, string username, string password)
             : this(CreateDefaultRestClient(subDomain, username, password))
@@ -19,21 +19,21 @@ namespace MoneyHawk.Core
                 {
                 }
 */
-        public MoneyBirdApi(JsonServiceClient client)
+        public MoneyBirdApi(ServiceClientBase client)
         {
             this.client = client;
         }
-        
 
-        private static JsonServiceClient CreateDefaultRestClient(string subDomain, string username, string password)
+        private static ServiceClientBase CreateDefaultRestClient(string subDomain, string username, string password)
         {
-            var client = new JsonServiceClient("https://" + subDomain + ".moneybird.nl/api/v1.0");
-            
-            var restRequest = new RestRequest();
-            
-            new RestClient().Get(restRequest);
+            var client = new JsonServiceClient(string.Format("https://{0}.moneybird.nl/api/v1.0", subDomain))
+            {
+                AlwaysSendBasicAuthHeader = true,
+            };
 
-            return new RestClient { BaseUrl = "https://" + subDomain + ".moneybird.nl/api/v1.0", Authenticator = new HttpBasicAuthenticator(username, password) };
+            client.SetCredentials(username, password);
+
+            return client;
         }
 
         /*private static RestClient CreateAuthRestClient(string subDomain, string accessToken)
@@ -81,31 +81,24 @@ namespace MoneyHawk.Core
             }
         }
 
-        public T Get<T>(string url) where T : class, new()
+        public T Get<T>(string url) where T : class
         {
-            var request = new RestRequest 
-            {
-                Resource = url
-            };
-
-            IRestResponse<T> restResponse = client.Execute<T>(request);
-
-            return restResponse.Data;
+            return client.Get<T>(url);
         }
 
         public T Put<T>(string url, T data) where T : class
-        {   
-            throw new NotImplementedException();
+        {
+            return client.Put<T>(data);
         }
 
         public T Post<T>(string url, T data) where T : class
-        {   
-            throw new NotImplementedException();
+        {
+            return client.Post<T>(data);
         }
 
         public T Delete<T>(string url, T data) where T : class
-        {   
-            throw new NotImplementedException();
+        {
+            return client.Delete<T>(url);
         }
 
         //TODO: response handling, copied directly from the MoneyBirdPHP API, however, most of these status codes are already handled in the .NET/REST stack:

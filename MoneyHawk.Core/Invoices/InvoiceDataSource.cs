@@ -30,13 +30,13 @@ namespace MoneyHawk.Core
         // Get all invoices	GET	/api/v1.0/invoices.xml
         public override IEnumerable<Invoice> GetAll()
         {
-            return api.Get<List<Invoice>>("invoices.xml");
+            return api.Get<List<Invoice>>("invoices.json");
         }
 
         // Get all invoices filtered	GET	/api/v1.0/invoices/filter/:filter.xml
         public IEnumerable<Invoice> GetAll(InvoiceSelection filter)
         {
-            return api.Get<InvoiceList>("invoices/filter/"+filter.ToString().ToLower()+".xml").Invoices;
+            return api.Get<InvoiceList>("invoices/filter/"+filter.ToString().ToLower()+".json").Invoices;
         }
 
         //Get all invoices filtered advanced by parameters	POST	/api/v1.0/invoices/filter/advanced.xml
