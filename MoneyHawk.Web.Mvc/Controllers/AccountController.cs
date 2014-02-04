@@ -47,10 +47,8 @@ namespace MoneyHawk.Web.Mvc.Controllers
                     await SignInAsync(user, model.RememberMe);
                     return RedirectToLocal(returnUrl);
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid username or password.");
-                }
+                
+                ModelState.AddModelError("", "Invalid username or password.");
             }
 
             // If we got this far, something failed, redisplay form
@@ -78,7 +76,7 @@ namespace MoneyHawk.Web.Mvc.Controllers
                 { 
                     UserName = model.UserName, 
                     MoneyBirdAccountName = model.MoneyBirdAccountName,
-                    MoneyBirdUserName = model.MoneyBirdAccountName,
+                    MoneyBirdUserName = model.MoneyBirdUserName,
                     MoneyBirdPassword = model.MoneyBirdPassword
                 };
 
@@ -88,10 +86,8 @@ namespace MoneyHawk.Web.Mvc.Controllers
                     await SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
-                else
-                {
-                    AddErrors(result);
-                }
+                
+                AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
