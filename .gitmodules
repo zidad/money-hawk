@@ -1,0 +1,3 @@
+[submodule "Net.Tools"]
+	path = Net.Tools
+	url = https://github.com/zidad/net-tools.git

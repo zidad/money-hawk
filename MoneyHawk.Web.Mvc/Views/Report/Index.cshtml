@@ -1,0 +1,38 @@
+﻿@using MoneyHawk.Web.Controllers
+@using MoneyHawk.Core
+@using MoneyHawk.Web.Mvc.Controllers
+@using Net.System
+@model List<MoneyHawk.Web.Mvc.Controllers.ExpenseLine>
+
+@{
+    ViewBag.Title = "Expense report";
+    Layout = "../Shared/DataOnly.cshtml";
+  }
+
+@{
+    var grid = new WebGrid<ExpenseLine>(source:Model, rowsPerPage:200);     
+}
+
+<div id="grid">
+    @grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "alt",
+        columns: grid.Columns(
+                    grid.Col("InvoiceDate", "Datum", line => line.Expense.InvoiceDate.To<String>("d")),
+                    grid.Col("Description", "Naam", line => line.Details.Description),
+                    grid.Col("Price Inc", "incl btw", line => line.Details.TotalPriceInclTax.To<String>("0.00")),
+                    grid.Col("Tax", "%", line => line.Details.Tax.To<String>("0 %")),
+                    grid.Col("Price Ex", "ex", line => line.Details.TotalPriceExclTax.To<String>("0.00")),
+                    grid.Col("TaxAmount", "btw", line => (line.Details.TotalPriceInclTax - line.Details.TotalPriceExclTax).To<String>("0.00")),
+                    grid.Col("Kind1", "soort", line => line.Type1),
+                    grid.Col("Kind2", "soort", line => line.Type2),
+                    grid.Col("Invoice", "factuurnummer", line => line.Expense.InvoiceId),
+                    grid.Col("ContactId", "contact nr", line => line.Contact.Id),
+                    grid.Col("Contact", "contact naam", line => line.Contact.Name),
+                    grid.Col("LedgerId", "grootboekrekening", line => line.Ledger.LedgerAccountId),
+                    grid.Col("Ledger", "Ledger", line => line.Ledger.Name),
+                    grid.Col("Price", "Price", line => line.Details.Price.To<String>("0.00"))
+            )
+        )
+</div>

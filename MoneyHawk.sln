@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{11C6D2F3-C003-4070-828C-65DB7B7F8B45}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Core", "MoneyHawk.Core\MoneyHawk.Core.csproj", "{F4184561-91B5-4108-8EA6-4A6D40912532}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Web.Mvc", "MoneyHawk.Web.Mvc\MoneyHawk.Web.Mvc.csproj", "{6522AB80-CAE5-489E-96D3-9134CC28145A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net.Core", "Net.Tools\src\Net.Core\Net.Core.csproj", "{BBA0A9E7-2819-4ADA-94DB-BF5F3C5A6E1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyHawk.Tests", "MoneyHawk.Tests\MoneyHawk.Tests.csproj", "{7C35A842-DF55-48CF-8DCA-8886387A46EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F4184561-91B5-4108-8EA6-4A6D40912532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4184561-91B5-4108-8EA6-4A6D40912532}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4184561-91B5-4108-8EA6-4A6D40912532}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4184561-91B5-4108-8EA6-4A6D40912532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6522AB80-CAE5-489E-96D3-9134CC28145A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA0A9E7-2819-4ADA-94DB-BF5F3C5A6E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA0A9E7-2819-4ADA-94DB-BF5F3C5A6E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA0A9E7-2819-4ADA-94DB-BF5F3C5A6E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA0A9E7-2819-4ADA-94DB-BF5F3C5A6E1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C35A842-DF55-48CF-8DCA-8886387A46EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C35A842-DF55-48CF-8DCA-8886387A46EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C35A842-DF55-48CF-8DCA-8886387A46EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C35A842-DF55-48CF-8DCA-8886387A46EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -17,12 +17,14 @@ class Invoice < ActiveResource::Base
 	self.site = "https://#{ARGV[0]}.moneybird.nl/api/v1.0"
 	self.user = ARGV[1]
 	self.password = ARGV[2]
+  #self.headers['authorization'] = 'Bearer mDIDZPSKvXn6g8IryoLnDdMRPrd38Spv3WYuU2Ww' #+ my_oauth2_token
+
 end
 
 def download_invoice(invoice)
 	invoice_date = Date.parse(invoice.invoice_date)
 
-	directory = "/moneybird/#{invoice_date.year}/verkoopfacturen/"
+	directory = "/c/users/wiebe/moneybird/#{invoice_date.year}/verkoopfacturen/"
 	filename = "#{directory}#{invoice.invoice_id}.pdf"
 
 	FileUtils.mkpath(directory) unless File.exists?(directory)
