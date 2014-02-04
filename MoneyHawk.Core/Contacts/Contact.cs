@@ -6,6 +6,7 @@ namespace MoneyHawk.Core
     [DataContract]
     public class Contact
     {
+
         // name	String	No	Read-only, company-name or firstname + lastname
         [DataMember(Name="contact_name")]
         public string Name { get; set; }
