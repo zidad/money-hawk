@@ -1,3 +1,5 @@
+using System.Data.Entity.SqlServer;
+
 namespace MoneyHawk.Web.Mvc.Migrations
 {
     using System;
@@ -5,6 +7,11 @@ namespace MoneyHawk.Web.Mvc.Migrations
     
     public partial class InitialCreate : DbMigration
     {
+        public InitialCreate()
+        {
+
+        }
+
         public override void Up()
         {
             CreateTable(

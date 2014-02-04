@@ -1,3 +1,5 @@
+using System.Data.Entity.SqlServer;
+
 namespace MoneyHawk.Web.Mvc.Migrations
 {
     using System;
@@ -5,12 +7,23 @@ namespace MoneyHawk.Web.Mvc.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
+    public class MyDbConfiguration : DbConfiguration
+    {
+        public MyDbConfiguration()
+        {
+            SetExecutionStrategy("System.Data.SqlClient",() => new SqlAzureExecutionStrategy(1, TimeSpan.FromSeconds(30))); 
+        }
+
+    }
+
     internal sealed class Configuration : DbMigrationsConfiguration<MoneyHawk.Web.Mvc.Models.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
             ContextKey = "MoneyHawk.Web.Mvc.Models.ApplicationDbContext";
+            
+           
         }
 
         protected override void Seed(MoneyHawk.Web.Mvc.Models.ApplicationDbContext context)

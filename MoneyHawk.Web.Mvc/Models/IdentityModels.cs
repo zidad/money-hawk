@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+﻿using System.Data.Entity.SqlServer;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MoneyHawk.Web.Mvc.Models
 {
@@ -17,6 +18,7 @@ namespace MoneyHawk.Web.Mvc.Models
         public ApplicationDbContext()
             : base("DefaultConnection")
         {
+
         }
     }
 }
