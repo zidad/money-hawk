@@ -1,7 +1,10 @@
 MoneyHawk
 ==========
+***etymology**: the bird that does see sharp*
 
 C# API for [moneybird](http://www.moneybird.nl)
+
+(The name MoneyHawk originates from the 
 
 This project uses [ServiceStack](https://servicestack.net/) to connect to the moneybird REST API, and I use it to generate exports for my accountants
 
