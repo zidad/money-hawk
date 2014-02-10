@@ -1,6 +1,6 @@
 MoneyHawk
 ==========
-***etymology**: the bird that does see sharp*
+* **etymology**: the moneybird that does see sharp*
 
 C# API for [moneybird](http://www.moneybird.nl)
 
