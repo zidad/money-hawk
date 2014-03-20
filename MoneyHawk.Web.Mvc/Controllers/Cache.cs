@@ -13,10 +13,10 @@ namespace MoneyHawk.Web.Controllers
         public void Add(string key, object value)
         {
             if (value == null) throw new ArgumentNullException("value", "value missing for key: " + key);
-            cache.Add(key, value, this.policy);
+            cache.Add(key, value, policy);
         }
 
-        public T GetOrAdd<T>(string key, Func<T> initializer) where T : class
+        public T GetOrAdd<T>(string key, Func<T> initializer)
         {
             T result;
             

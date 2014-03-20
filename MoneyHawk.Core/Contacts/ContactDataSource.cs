@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using ServiceStack;
 
 namespace MoneyHawk.Core
 {
@@ -15,7 +16,8 @@ namespace MoneyHawk.Core
     /// </summary>
     public class ContactDataSource : DataSource<Contact>
     {
-        public ContactDataSource(IMoneyBirdApi api) : base(api)
+        public ContactDataSource(IServiceClient api)
+            : base(api)
         {
         }
 

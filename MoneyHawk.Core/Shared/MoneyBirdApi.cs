@@ -1,30 +1,28 @@
-using System;
 using ServiceStack;
-using ServiceStack.Common;
 
 namespace MoneyHawk.Core
 {
     public class MoneyBirdApi : IMoneyBirdApi
     {
-        private readonly ServiceClientBase client;
+        private readonly IServiceClient client;
 
         public MoneyBirdApi(string subDomain, string username, string password)
             : this(CreateDefaultRestClient(subDomain, username, password))
         {
         }
 
-        /*
+/*
                 public MoneyBirdApi(string subDomain, string accessToken)
                     : this(CreateAuthRestClient(subDomain, accessToken))
                 {
                 }
 */
-        public MoneyBirdApi(ServiceClientBase client)
+        public MoneyBirdApi(IServiceClient client)
         {
             this.client = client;
         }
 
-        private static ServiceClientBase CreateDefaultRestClient(string subDomain, string username, string password)
+        public static IServiceClient CreateDefaultRestClient(string subDomain, string username, string password)
         {
             var client = new JsonServiceClient(string.Format("https://{0}.moneybird.nl/api/v1.0", subDomain))
             {
@@ -53,7 +51,7 @@ namespace MoneyHawk.Core
         {
             get 
             {
-                return new InvoiceDataSource(this);
+                return new InvoiceDataSource(client);
             }
         }
 
@@ -61,7 +59,7 @@ namespace MoneyHawk.Core
         {
             get 
             {
-                return new LedgerAccountDataSource(this);
+                return new LedgerAccountDataSource(client);
             }
         }
 
@@ -69,7 +67,7 @@ namespace MoneyHawk.Core
         {
             get 
             {
-                return new IncomingInvoicesDataSource(this);
+                return new IncomingInvoicesDataSource(client);
             }
         }
 
@@ -77,7 +75,7 @@ namespace MoneyHawk.Core
         {
             get
             {
-                return new ContactDataSource(this);
+                return new ContactDataSource(client);
             }
         }
 
@@ -86,19 +84,19 @@ namespace MoneyHawk.Core
             return client.Get<T>(url);
         }
 
-        public T Put<T>(string url, T data) where T : class
+        public T Put<T>(T data) where T : class
         {
             return client.Put<T>(data);
         }
 
-        public T Post<T>(string url, T data) where T : class
+        public T Post<T>(T data) where T : class
         {
             return client.Post<T>(data);
         }
 
-        public T Delete<T>(string url, T data) where T : class
+        public T Delete<T>(T data) where T : class
         {
-            return client.Delete<T>(url);
+            return client.Delete<T>(data);
         }
 
         //TODO: response handling, copied directly from the MoneyBirdPHP API, however, most of these status codes are already handled in the .NET/REST stack:

@@ -4,15 +4,16 @@ using System.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Microsoft.SqlServer.Server;
+using ServiceStack;
 
 namespace MoneyHawk.Core
 {
     public class IncomingInvoicesDataSource
     {
-        private readonly IMoneyBirdApi api;
+        private readonly IServiceClient api;
         private string extension = "json";
 
-        public IncomingInvoicesDataSource(IMoneyBirdApi api)
+        public IncomingInvoicesDataSource(IServiceClient api)
         {
             if (api == null) throw new ArgumentNullException("api");
             this.api = api;

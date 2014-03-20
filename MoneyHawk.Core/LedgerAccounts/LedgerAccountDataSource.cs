@@ -1,5 +1,6 @@
 using System.Linq;
 using System;
+using ServiceStack;
 
 namespace MoneyHawk.Core
 {
@@ -13,7 +14,7 @@ namespace MoneyHawk.Core
     /// </summary>
     public class LedgerAccountDataSource : DataSource<LedgerAccount>
     {
-        public LedgerAccountDataSource(IMoneyBirdApi api)
+        public LedgerAccountDataSource(IServiceClient api)
             : base(api)
         {
         }

@@ -8,6 +8,7 @@ using MoneyHawk.Core;
 using MoneyHawk.Web.Controllers;
 using MoneyHawk.Web.Mvc.Models;
 using Net.Text;
+using ServiceStack;
 
 namespace MoneyHawk.Web.Mvc.Controllers
 {
@@ -30,7 +31,8 @@ namespace MoneyHawk.Web.Mvc.Controllers
             if (username.HasNoValue() || password.HasNoValue() || subdomain.HasNoValue())
                 throw new Exception("Missing data account, please log in");
 
-            return new CachedMoneyBirdApi(new MoneyBirdApi(subdomain, username, password));
+            var defaultRestClient = MoneyBirdApi.CreateDefaultRestClient(subdomain, username, password);
+            return new CachedMoneyBirdApi(defaultRestClient);
         }
         
 /*

@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using MoneyHawk.Core;
 using MoneyHawk.Core.Invoices;
-using MoneyHawk.Web.Controllers;
 using MoneyHawk.Web.Mvc.Models;
 
 namespace MoneyHawk.Web.Mvc.Controllers

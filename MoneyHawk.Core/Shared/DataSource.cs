@@ -1,5 +1,6 @@
 using System.Linq;
 using System;
+using ServiceStack;
 
 namespace MoneyHawk.Core
 {
@@ -7,9 +8,9 @@ namespace MoneyHawk.Core
 
     public abstract class DataSource<T>
     {
-        protected readonly IMoneyBirdApi api;
+        protected readonly IServiceClient api;
 
-        public DataSource(IMoneyBirdApi api)
+        public DataSource(IServiceClient api)
         {
             this.api = api;
         }
