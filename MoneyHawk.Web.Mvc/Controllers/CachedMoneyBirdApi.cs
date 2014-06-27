@@ -357,6 +357,12 @@ namespace MoneyHawk.Web.Controllers
             return cachedClient.PostFile<TResponse>(relativeOrAbsoluteUrl, fileToUpload, fileName, mimeType);
         }
 
+        public TResponse PostFileWithRequest<TResponse>(Stream fileToUpload, string fileName, object request,
+            string fieldName = "upload")
+        {
+            return cachedClient.PostFileWithRequest<TResponse>(fileToUpload, fileName, request, fieldName);
+        }
+
         public TResponse PostFileWithRequest<TResponse>(string relativeOrAbsoluteUrl, FileInfo fileToUpload, object request,
             string fieldName = "upload")
         {
