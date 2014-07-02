@@ -70,7 +70,9 @@
     <Compile Include="Contacts\Contact.cs" />
     <Compile Include="Contacts\ContactDataSource.cs" />
     <Compile Include="Contacts\ContactWrapper.cs" />
+    <Compile Include="IncomingInvoices\IncomingInvoiceWrapper.cs" />
     <Compile Include="IncomingInvoices\Payment.cs" />
+    <Compile Include="Invoices\InvoiceWrapper.cs" />
     <Compile Include="LedgerAccounts\LedgerAccount.cs" />
     <Compile Include="LedgerAccounts\LedgerAccountDataSource.cs" />
     <Compile Include="Shared\Attachment.cs" />

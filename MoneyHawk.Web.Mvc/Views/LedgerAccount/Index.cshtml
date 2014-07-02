@@ -1,16 +1,18 @@
-﻿@model IList<MoneyHawk.Core.LedgerAccount>
+﻿@using MoneyHawk.Core
+@using Net.Web
+@model IList<MoneyHawk.Core.LedgerAccount>
 
 @{
     ViewBag.Title = "Ledger accounts";
 }
 
 @{
-    var grid = new WebGrid(source:Model); 
+    var grid = new WebGrid<LedgerAccount>(source:Model); 
 }
 
 <div id="grid">
     @grid.GetHtml(
-        tableStyle: "grid",
+                tableStyle: "table table-striped table-bordered",
         headerStyle: "head",
         alternatingRowStyle: "alt"
     )

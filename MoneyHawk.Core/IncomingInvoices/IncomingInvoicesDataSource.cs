@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
-using System.Xml.Serialization;
-using Microsoft.SqlServer.Server;
 using ServiceStack;
 
 namespace MoneyHawk.Core
@@ -11,7 +8,7 @@ namespace MoneyHawk.Core
     public class IncomingInvoicesDataSource
     {
         private readonly IServiceClient api;
-        private string extension = "json";
+        private const string extension = "json";
 
         public IncomingInvoicesDataSource(IServiceClient api)
         {

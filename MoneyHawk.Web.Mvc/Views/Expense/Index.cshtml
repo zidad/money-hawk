@@ -1,11 +1,13 @@
-﻿@model System.Collections.Generic.IEnumerable<MoneyHawk.Core.IncomingInvoice>
+﻿@using MoneyHawk.Core
+@using Net.Web
+@model IEnumerable<IncomingInvoice>
 
 @{
     ViewBag.Title = "Expenses";
 }
 
 @{
-    var grid = new WebGrid(Model)
+    var grid = new WebGrid<IncomingInvoice>(Model)
     {
        
     
@@ -13,5 +15,5 @@
 }
 
 <div id="grid">
-    @grid.GetHtml()
+    @grid.GetHtml(tableStyle:"table table-striped table-bordered")
 </div>

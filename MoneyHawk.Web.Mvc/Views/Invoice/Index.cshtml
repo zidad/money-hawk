@@ -1,16 +1,18 @@
-﻿@model IEnumerable<MoneyHawk.Core.Invoices.Invoice>
+﻿@using MoneyHawk.Core.Invoices
+@using Net.Web
+@model IEnumerable<MoneyHawk.Core.Invoices.Invoice>
 
 @{
     ViewBag.Title = "Invoices";
 }
 
 @{
-    var grid = new WebGrid(source:Model); 
+    var grid = new WebGrid<Invoice>(source:Model); 
 }
 
 <div id="grid">
     @grid.GetHtml(
-        tableStyle: "grid",
+                tableStyle: "table table-striped table-bordered",
         headerStyle: "head",
         alternatingRowStyle: "alt"
     )

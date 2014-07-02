@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using MoneyHawk.Core.Invoices;
 using ServiceStack;
 
@@ -24,34 +23,33 @@ namespace MoneyHawk.Core
     /// </summary>
     public class InvoiceDataSource : DataSource<Invoice>
     {
+        private const string extension = "json";
+
         public InvoiceDataSource(IServiceClient api)
             : base(api)
         {
         }
 
-        // Get all invoices	GET	/api/v1.0/invoices.xml
+        ///Get all incoming invoices	GET	/api/v1.0/incoming_invoices.xml
         public override IEnumerable<Invoice> GetAll()
         {
-            return api.Get<List<Invoice>>("invoices.json");
+            var invoiceWrappers = api.Get<InvoiceWrapper[]>("invoices." + extension);
+            var invoices = invoiceWrappers.Select(w => w.Invoice);
+            return invoices.ToArray();
+        }
+
+        ///Get an incoming invoice	GET	/api/v1.0/incoming_invoices/:id.xml
+        public Invoice GetById(int id)
+        {
+            return api.Get<Invoice>(string.Format("invoices/{0}." + extension, id));
         }
 
         // Get all invoices filtered	GET	/api/v1.0/invoices/filter/:filter.xml
         public IEnumerable<Invoice> GetAll(InvoiceSelection filter)
         {
-            return api.Get<InvoiceList>("invoices/filter/"+filter.ToString().ToLower()+".json").Invoices;
+            var invoiceWrappers = api.Get<InvoiceWrapper[]>(string.Format("invoices/filter/{0}.{1}", filter.ToString(), extension));
+            var invoices = invoiceWrappers.Select(w => w.Invoice);
+            return invoices.ToArray();
         }
-
-        //Get all invoices filtered advanced by parameters	POST	/api/v1.0/invoices/filter/advanced.xml
-        //Get invoice	GET	/api/v1.0/invoices/:id.xml
-        //Get invoice by invoice_id	GET	/api/v1.0/invoices/invoice_id/:invoice_id.xml
-        //Create new invoice	POST	/api/v1.0/invoices.xml
-        //Update invoice	PUT	/api/v1.0/invoices/:id.xml
-        //Send invoice	PUT	/api/v1.0/invoices/:id/send_invoice.xml
-        //Send invoice reminder	PUT	/api/v1.0/invoices/:id/send_reminder.xml
-        //Register payment	POST	/api/v1.0/invoices/:id/payments.xml
-        //Delete invoice	DELETE	/api/v1.0/invoices/:id.xml
-        //Get list of invoices for syncing	GET	/api/v1.0/invoices/sync_list_ids.xml
-        //Get specified invoices for syncing	POST	/api/v1.0/invoices/sync_fetch_ids.xml
-
     }
 }
