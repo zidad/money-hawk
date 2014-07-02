@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace MoneyHawk.Web.Controllers
 {
-    public class InvoiceReportModel
+    public class InvoiceReportLine
     {
         [DisplayName("factnr")]
         public string InvoiceNumber { get; set; }

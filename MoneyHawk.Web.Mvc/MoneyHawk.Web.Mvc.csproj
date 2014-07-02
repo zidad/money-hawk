@@ -214,12 +214,12 @@
     <Compile Include="Code\CachedMoneyBirdApi.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ExpenseController.cs" />
-    <Compile Include="Controllers\ExpenseLineWithRelations.cs" />
-    <Compile Include="Controllers\ExpenseReportModel.cs" />
+    <Compile Include="Models\ExpenseLineWithRelations.cs" />
+    <Compile Include="Models\ExpenseReportLine.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
-    <Compile Include="Controllers\InvoiceLineWithRelations.cs" />
-    <Compile Include="Controllers\InvoiceReportModel.cs" />
+    <Compile Include="Models\InvoiceLineWithRelations.cs" />
+    <Compile Include="Models\InvoiceReportLine.cs" />
     <Compile Include="Controllers\LedgerAccountController.cs" />
     <Compile Include="Code\MoneyBirdFactory.cs" />
     <Compile Include="Controllers\ReportController.cs" />

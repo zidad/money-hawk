@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace MoneyHawk.Web.Controllers
 {
-    public class ExpenseReportModel
+    public class ExpenseReportLine
     {
         [DisplayName("Datum")]
         public DateTime? InvoiceDate { get; set; }

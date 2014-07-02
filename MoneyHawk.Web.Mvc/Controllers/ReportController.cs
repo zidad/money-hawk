@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Threading;
 using System.Web.Mvc;
 using MoneyHawk.Core;
 using MoneyHawk.Core.Invoices;
@@ -69,9 +72,9 @@ namespace MoneyHawk.Web.Controllers
             return api.Invoices.GetAll().Where(c => c.ContactId.HasValue);
         }
 
-        private IEnumerable<InvoiceReportModel> GetInvoiceReportLines()
+        private IEnumerable<InvoiceReportLine> GetInvoiceReportLines()
         {
-            return InvoiceLinesWithContacts().Select(i => new InvoiceReportModel
+            return InvoiceLinesWithContacts().Select(i => new InvoiceReportLine
             {
                 InvoiceNumber = i.Invoice.InvoiceId,
                 InvoiceDate = i.Invoice.InvoiceDate,
@@ -84,9 +87,9 @@ namespace MoneyHawk.Web.Controllers
             });
         }
 
-        private IEnumerable<ExpenseReportModel> GetExpenseReportLines()
+        private IEnumerable<ExpenseReportLine> GetExpenseReportLines()
         {
-            return GetExpenseLinesWithContact().Select(line => new ExpenseReportModel
+            return GetExpenseLinesWithContact().Select(line => new ExpenseReportLine
             {
                 InvoiceDate = line.Expense.InvoiceDate, //.To<String>("d")),
                 Description = line.Details.Description,
@@ -130,17 +133,30 @@ namespace MoneyHawk.Web.Controllers
             using (var excelPackage = new ExcelPackage())
             {
                 //Create the worksheet
-                var expenses = excelPackage.Workbook.Worksheets.Add("Uitgaven");
+                var expenseWorksheet = excelPackage.Workbook.Worksheets.Add("Uitgaven");
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
-                expenses.Cells["A1"].LoadFromCollection(GetExpenseReportLines(), true, TableStyles.Light1);
+                var expenseReportLines = GetExpenseReportLines().ToArray();
+                expenseWorksheet.Cells["A1"].LoadFromCollection(expenseReportLines, true, TableStyles.Light1);
 
+                var propertyInfos = typeof(ExpenseReportLine).GetProperties();
+                for (var index = 0; index < propertyInfos.Length; index++)
+                {
+                    var property = propertyInfos[index];
+                    var col = (char)('A' + index);                    
 
-                var income = excelPackage.Workbook.Worksheets.Add("Inkomsten");
+                    if (property.PropertyType == typeof (DateTime) || property.PropertyType==typeof(DateTime?))
+                    {
+                        var address = col + "1" + ":" + col + (expenseReportLines.Length + 1);
+                        expenseWorksheet.Cells[address].Style.Numberformat.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+                    }
+                }
+
+                var incomeWorksheet = excelPackage.Workbook.Worksheets.Add("Inkomsten");
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
-                income.Cells["A1"].LoadFromCollection(GetInvoiceReportLines(), true, TableStyles.Light1);
-
+                var invoiceReportLines = GetInvoiceReportLines().ToArray();
+                incomeWorksheet.Cells["A1"].LoadFromCollection(invoiceReportLines, true, TableStyles.Light1);
 
 /*
                 //Format the header for column 1-3
