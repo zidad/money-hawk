@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using MoneyHawk.Web.Mvc.Models;
 
-namespace MoneyHawk.Web.Mvc.Controllers
+namespace MoneyHawk.Web.Controllers
 {
     [Authorize]
     public class AccountController : Controller

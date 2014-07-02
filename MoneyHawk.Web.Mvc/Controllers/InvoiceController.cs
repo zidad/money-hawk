@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using MoneyHawk.Core;
 using MoneyHawk.Core.Invoices;
-using MoneyHawk.Web.Mvc.Models;
 
-namespace MoneyHawk.Web.Mvc.Controllers
+namespace MoneyHawk.Web.Controllers
 {
     [Authorize]
     public class InvoiceController : Controller
@@ -14,8 +12,6 @@ namespace MoneyHawk.Web.Mvc.Controllers
         {
             moneybird = MoneyBirdFactory.GetInstance();
         }
-
-        private UserManager<ApplicationUser> userManager;
 
         private readonly IMoneyBirdApi moneybird;
 

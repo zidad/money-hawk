@@ -1,8 +1,7 @@
 ﻿using System.Web.Mvc;
 
-namespace MoneyHawk.Web.Mvc.Controllers
+namespace MoneyHawk.Web.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -12,15 +11,6 @@ namespace MoneyHawk.Web.Mvc.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }

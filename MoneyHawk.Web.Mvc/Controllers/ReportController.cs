@@ -7,7 +7,7 @@ using MoneyHawk.Core;
 using Net.Text;
 using OfficeOpenXml;
 
-namespace MoneyHawk.Web.Mvc.Controllers
+namespace MoneyHawk.Web.Controllers
 {
     [Authorize]
     public class ReportController : Controller
