@@ -210,14 +210,18 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Cache.cs" />
-    <Compile Include="Controllers\CachedMoneyBirdApi.cs" />
+    <Compile Include="Code\Cache.cs" />
+    <Compile Include="Code\CachedMoneyBirdApi.cs" />
     <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\ExpenseController.cs" />
+    <Compile Include="Controllers\ExpenseLineWithRelations.cs" />
+    <Compile Include="Controllers\ExpenseReportModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\InvoiceLineWithRelations.cs" />
+    <Compile Include="Controllers\InvoiceReportModel.cs" />
     <Compile Include="Controllers\LedgerAccountController.cs" />
-    <Compile Include="Controllers\MoneyBirdFactory.cs" />
+    <Compile Include="Code\MoneyBirdFactory.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -233,6 +237,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\moneybird_bird.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

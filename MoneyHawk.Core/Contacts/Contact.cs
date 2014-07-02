@@ -6,10 +6,13 @@ namespace MoneyHawk.Core
     [DataContract]
     public class Contact
     {
-
-        // name	String	No	Read-only, company-name or firstname + lastname
-        [DataMember(Name="contact_name")]
+        // name	String	No	Read_only, company_name or firstname + lastname
+        [DataMember(Name="name")]
         public string Name { get; set; }
+
+        // name	String	No	Read_only, company_name or firstname + lastname
+        [DataMember(Name="contact_name")]
+        public string ContactName { get; set; }
 
           // address1	String	No	
         [DataMember(Name = "address1")]
@@ -28,50 +31,46 @@ namespace MoneyHawk.Core
         public string BankAccount { get; set; }	
         
         // chamber-of-commerce	String	No	
-        [DataMember(Name = "chamber-of-commerce")]
+        [DataMember(Name = "chamber_of_commerce")]
         public string ChamberOfCommerce { get; set; }
         
         // city	String	No	
         [DataMember(Name = "city")]
         public string City { get; set; }
         
-        // company-name	String	Yes	At least a company-name, firstname or lastname is required
-        [DataMember(Name = "company-name")]
+        // company_name	String	Yes	At least a company_name, firstname or lastname is required
+        [DataMember(Name = "company_name")]
         public string CompanyName { get; set; }
         
-        // contact-hash	String	No	Read-only, unique hash for the contact
-        [DataMember(Name = "contact-hash")]
+        // contact_hash	String	No	Read_only, unique hash for the contact
+        [DataMember(Name = "contact_hash")]
         public string ContactHash { get; set; }
-        
-        // contact-name	String	No	Read-only, firstname + lastname
-        [DataMember(Name = "contact-name")]
-        public string ContactName { get; set; }
-        
+                
         // country	String	No	
         [DataMember(Name = "country")]
         public string Country { get; set; }
         
-        // created-at	Datetime	No	Read-only, for example: 2011-02-15T13:13:50+01:00
-        [DataMember(Name = "created-at")]
+        // created_at	Datetime	No	Read_only, for example: 2011_02_15T13:13:50+01:00
+        [DataMember(Name = "created_at")]
         public DateTime CreatedAt { get; set; }
        
-        // customer-id	String	Yes	Unique (customer)id for the contact, for example: C100
-        [DataMember(Name = " customer-id")]
+        // customer_id	String	Yes	Unique (customer)id for the contact, for example: C100
+        [DataMember(Name = " customer_id")]
         public string CustomerId { get; set; }
         
         // email	String	No	
         [DataMember(Name = "email")]
         public string Email { get; set; }
         
-        // firstname	String	Yes	At least a company-name, firstname or lastname is required
+        // firstname	String	Yes	At least a company_name, firstname or lastname is required
         [DataMember(Name = "firstname")]
         public string Firstname { get; set; }
         
-        // id	Integer	No	Read-only, the unique id of the contact
+        // id	Integer	No	Read_only, the unique id of the contact
         [DataMember(Name = "id")]
         public int Id { get; set; }
         
-        // lastname	String	Yes	At least a company-name, firstname or lastname is required
+        // lastname	String	Yes	At least a company_name, firstname or lastname is required
         [DataMember(Name = "lastname")]
         public string Lastname { get; set; }
                 
@@ -79,24 +78,29 @@ namespace MoneyHawk.Core
         [DataMember(Name = "phone")]
         public string Phone { get; set; }
         
-        // revision	Integer	No	Read-only, incremental integer, increases if contact is updated
+        // revision	Integer	No	Read_only, incremental integer, increases if contact is updated
         [DataMember(Name = "revision")]
         public int Revision { get; set; }
         
-        // send-method	String	No	Allowed values: email, hand or post, default: email
-        [DataMember(Name = "send-method")]
+        // send_method	String	No	Allowed values: email, hand or post, default: email
+        [DataMember(Name = "send_method")]
         public string SendMethod { get; set; }
         
-        // tax-number	String	No	
-        [DataMember(Name = "tax-number")]
+        // tax_number	String	No	
+        [DataMember(Name = "tax_number")]
         public string TaxNumber { get; set; }
         
-        // updated-at	Datetime	No	Read-only, for example: 2011-02-15T13:13:50+01:00
-        [DataMember(Name = "updated-at")]
+        // updated_at	Datetime	No	Read_only, for example: 2011_02_15T13:13:50+01:00
+        [DataMember(Name = "updated_at")]
         public DateTime UpdatedAt { get; set; }
         
         // zipcode	String	No	
         [DataMember(Name = "zipcode")]
         public string Zipcode { get; set; }
-      }
+
+        public override string ToString()
+        {
+            return string.Format("Id: {4}, Name: {0} CompanyName: {1}, ContactName: {2}, Country: {3}", Name, CompanyName, ContactName, Country, Id);
+        }
+    }
 }

@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Web.Mvc;
 using MoneyHawk.Core;
+using MoneyHawk.Core.Invoices;
 using Net.Text;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
 
 namespace MoneyHawk.Web.Controllers
 {
@@ -21,45 +24,127 @@ namespace MoneyHawk.Web.Controllers
 
         public ActionResult Index()
         {
+            var expenseLines = GetExpenseLinesWithContact();
+
+            return View(expenseLines);
+        }
+
+        private List<ExpenseLineWithRelations> GetExpenseLinesWithContact()
+        {
             var incomingInvoices = api.IncomingInvoices.GetAll();
 
             var invoiceLines = incomingInvoices
-                .SelectMany(incomingInvoice => incomingInvoice.Details.Select(x => new { Expense = incomingInvoice, Details = x }))
+                .SelectMany(
+                    incomingInvoice =>
+                        incomingInvoice.Details.Select(details => new {Expense = incomingInvoice, Details = details}))
                 .Where(e => e.Expense.ContactId.HasValue && e.Details.LedgerAccountId.HasValue);
 
             var contacts = GetContacts();
             var ledgerAccounts = api.LedgerAccounts.GetAll();
 
             var lines = from expense in invoiceLines
-                    join contact in contacts on expense.Expense.ContactId.Value equals contact.Id
-                    join ledger in ledgerAccounts on expense.Details.LedgerAccountId.Value equals ledger.Id
-                    select new ExpenseLine { Expense = expense.Expense, Details = expense.Details, Contact = contact, Ledger = ledger };
+                join contact in contacts on expense.Expense.ContactId.Value equals contact.Id
+                join ledger in ledgerAccounts on expense.Details.LedgerAccountId.Value equals ledger.Id
+                select
+                    new ExpenseLineWithRelations
+                    {
+                        Expense = expense.Expense,
+                        Details = expense.Details,
+                        Contact = contact,
+                        Ledger = ledger
+                    };
 
-            var expenseLines = lines.Where(e=>!e.Details.Description.ContainsIgnoreCase("Prive")).ToList();
-
-            return View(expenseLines);
+            var expenseLines = lines.Where(e => !e.Details.Description.ContainsIgnoreCase("Prive")).ToList();
+            return expenseLines;
         }
 
         private IEnumerable<Contact> GetContacts()
         {
-            var contacts = this.api.Contacts.GetAll();
+            var contacts = api.Contacts.GetAll();
             return contacts;
         }
 
-        [HttpPost]
+        private IEnumerable<Invoice> GetInvoices()
+        {
+            return api.Invoices.GetAll().Where(c => c.ContactId.HasValue);
+        }
+
+        private IEnumerable<InvoiceReportModel> GetInvoiceReportLines()
+        {
+            return InvoiceLinesWithContacts().Select(i => new InvoiceReportModel
+            {
+                InvoiceNumber = i.Invoice.InvoiceId,
+                InvoiceDate = i.Invoice.InvoiceDate,
+                CustomerName = i.Contact.Name,
+                TotalPriceExclTax = i.Details.TotalPriceExclTax,
+                TaxPercentage = i.Details.Tax,
+                TotalPriceInclTax = i.Details.TotalPriceInclTax,
+                TotalTax = i.Details.TotalPriceInclTax - i.Details.TotalPriceExclTax,
+                Paid = i.Invoice.State
+            });
+        }
+
+        private IEnumerable<ExpenseReportModel> GetExpenseReportLines()
+        {
+            return GetExpenseLinesWithContact().Select(line => new ExpenseReportModel
+            {
+                InvoiceDate = line.Expense.InvoiceDate, //.To<String>("d")),
+                Description = line.Details.Description,
+                TotalPriceIncTax = line.Details.TotalPriceInclTax, //.To<String>("0.00")),
+                Tax = line.Details.Tax, //.To<String>("0 %")),
+                TotalPriceExclTax = line.Details.TotalPriceExclTax, //.To<String>("0.00")),
+                TotalPriceInclTax = line.Details.TotalPriceInclTax, // - line.Details.TotalPriceExclTax)
+                Kind1 = line.Type1,
+                Kind2 = line.Type2,
+                Invoice = line.Expense.InvoiceId,
+                ContactId = line.Contact.Id,
+                Contact = line.Contact.Name,
+                LedgerId = line.Ledger.LedgerAccountId,
+                Ledger = line.Ledger.Name,
+                Price = line.Details.Price //.To<String>("0.00"))
+            });
+        }
+
+        private IEnumerable<InvoiceLineWithRelations> InvoiceLinesWithContacts()
+        {
+            var contacts = GetContacts();
+
+            var invoiceLines = GetInvoices()
+                .SelectMany(invoice => invoice.Details.Select(details =>
+                    new
+                    {
+                        Invoice = invoice,
+                        Details = details
+                    }));
+
+            var invoiceLinesWithContacts = from invoice in invoiceLines
+                join contact in contacts on invoice.Invoice.ContactId equals contact.Id
+                select new InvoiceLineWithRelations {Invoice = invoice.Invoice, Details = invoice.Details, Contact = contact};
+
+            return invoiceLinesWithContacts;
+        }
+
+        [HttpGet]
         public ActionResult Export(ReportOptions options)
         {
-            using (var pck = new ExcelPackage())
+            using (var excelPackage = new ExcelPackage())
             {
-/*
                 //Create the worksheet
-                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Demo");
+                var expenses = excelPackage.Workbook.Worksheets.Add("Uitgaven");
 
-                //Load the datatable into the sheet, starting from cell A1. Print the column names on row 1
-                ws.Cells["A1"].LoadFromDataTable(tbl, true);
+                //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
+                expenses.Cells["A1"].LoadFromCollection(GetExpenseReportLines(), true, TableStyles.Light1);
 
+
+                var income = excelPackage.Workbook.Worksheets.Add("Inkomsten");
+
+                //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
+                income.Cells["A1"].LoadFromCollection(GetInvoiceReportLines(), true, TableStyles.Light1);
+
+
+/*
                 //Format the header for column 1-3
-                using (ExcelRange rng = ws.Cells["A1:C1"])
+                using (var rng = ws.Cells["A1:C1"])
                 {
                     rng.Style.Font.Bold = true;
                     rng.Style.Fill.PatternType = ExcelFillStyle.Solid;                      //Set Pattern for the background to Solid
@@ -73,59 +158,15 @@ namespace MoneyHawk.Web.Controllers
                     col.Style.Numberformat.Format = "#,##0.00";
                     col.Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 }
-
-                //Write it back to the client
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;  filename=ExcelDemo.xlsx");
-                Response.BinaryWrite(pck.GetAsByteArray());
-
-                return new FileStreamResult();
-                //return new ExcelExportResult();
 */
-                throw new NotImplementedException();
-            }
-        }
-    }
 
-    public class ExcelExportResult : ActionResult
-    {
-        public override void ExecuteResult(ControllerContext context)
-        {
-            
+                return File(excelPackage.GetAsByteArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+            }
         }
     }
 
     public class ReportOptions
     {
-    }
-
-    public class ExpenseReport 
-    { 
-        
-    }
-
-    [DataContract]
-    public class ExpenseLine
-    {
-        public IncomingInvoice Expense { get; set; }
-        public Details Details { get; set; }
-        public Contact Contact { get; set; }
-        public LedgerAccount Ledger { get; set; }
-
-        public string Type1
-        {
-            get
-            {
-                return Ledger.Name.Split('-').Skip(1).FirstOrDefault() ?? "";
-            }
-        }
-        
-        public string Type2
-        {
-            get
-            {
-                return Ledger.Name.Split('-').Skip(2).FirstOrDefault() ?? "";
-            }
-        }
     }
 }

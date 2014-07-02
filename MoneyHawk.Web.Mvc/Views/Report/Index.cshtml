@@ -2,7 +2,7 @@
 @using MoneyHawk.Core
 @using Net.System
 @using Net.Web
-@model List<MoneyHawk.Web.Controllers.ExpenseLine>
+@model List<MoneyHawk.Web.Controllers.ExpenseLineWithRelations>
 
 @{
     ViewBag.Title = "Expense report";
@@ -10,7 +10,7 @@
   }
 
 @{
-    var grid = new WebGrid<ExpenseLine>(source:Model, rowsPerPage:200);     
+    var grid = new WebGrid<ExpenseLineWithRelations>(source:Model, rowsPerPage:200);     
 }
 
 <div id="grid">
@@ -31,8 +31,8 @@
                     grid.Col("ContactId", "contact nr", line => line.Contact.Id),
                     grid.Col("Contact", "contact naam", line => line.Contact.Name),
                     grid.Col("LedgerId", "grootboekrekening", line => line.Ledger.LedgerAccountId),
-                    grid.Col("Ledger", "Ledger", line => line.Ledger.Name),
-                    grid.Col("Price", "Price", line => line.Details.Price.To<String>("0.00"))
+                    grid.Col("Ledger", "grootboekrekeningnaam", line => line.Ledger.Name),
+                    grid.Col("Price", "prijs", line => line.Details.Price.To<String>("0.00"))
             )
         )
 </div>
