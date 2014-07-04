@@ -144,7 +144,7 @@ namespace MoneyHawk.Web.Controllers
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
                 var expenseReportLines = GetExpenseReportLines()
-                    .Where(e=>e.InvoiceDate.Between(start,end))
+                    .Where(e=>e.InvoiceDate.Between(start, end))
                     .ToArray();
 
                 expenseWorksheet.Cells["A1"].LoadFromCollection(expenseReportLines, true, TableStyles.Light1);
