@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Web.Mvc;
 using MoneyHawk.Core;
 using MoneyHawk.Core.Invoices;
+using Net.System;
 using Net.Text;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
+using ServiceStack;
 
 namespace MoneyHawk.Web.Controllers
 {
@@ -26,6 +24,11 @@ namespace MoneyHawk.Web.Controllers
         }
 
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Expenses()
         {
             var expenseLines = GetExpenseLinesWithContact();
 
@@ -122,13 +125,17 @@ namespace MoneyHawk.Web.Controllers
 
             var invoiceLinesWithContacts = from invoice in invoiceLines
                 join contact in contacts on invoice.Invoice.ContactId equals contact.Id
-                select new InvoiceLineWithRelations {Invoice = invoice.Invoice, Details = invoice.Details, Contact = contact};
+                select new InvoiceLineWithRelations { 
+                    Invoice = invoice.Invoice, 
+                    Details = invoice.Details, 
+                    Contact = contact
+                };
 
             return invoiceLinesWithContacts;
         }
 
         [HttpGet]
-        public ActionResult Export(ReportOptions options)
+        public ActionResult Export(DateTime start, DateTime end)
         {
             using (var excelPackage = new ExcelPackage())
             {
@@ -136,27 +143,24 @@ namespace MoneyHawk.Web.Controllers
                 var expenseWorksheet = excelPackage.Workbook.Worksheets.Add("Uitgaven");
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
-                var expenseReportLines = GetExpenseReportLines().ToArray();
+                var expenseReportLines = GetExpenseReportLines()
+                    .Where(e=>e.InvoiceDate.Between(start,end))
+                    .ToArray();
+
                 expenseWorksheet.Cells["A1"].LoadFromCollection(expenseReportLines, true, TableStyles.Light1);
 
-                var propertyInfos = typeof(ExpenseReportLine).GetProperties();
-                for (var index = 0; index < propertyInfos.Length; index++)
-                {
-                    var property = propertyInfos[index];
-                    var col = (char)('A' + index);                    
-
-                    if (property.PropertyType == typeof (DateTime) || property.PropertyType==typeof(DateTime?))
-                    {
-                        var address = col + "1" + ":" + col + (expenseReportLines.Length + 1);
-                        expenseWorksheet.Cells[address].Style.Numberformat.Format = Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
-                    }
-                }
+                UpdateFormattingFromCollection(expenseReportLines, expenseWorksheet);
 
                 var incomeWorksheet = excelPackage.Workbook.Worksheets.Add("Inkomsten");
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
-                var invoiceReportLines = GetInvoiceReportLines().ToArray();
+                var invoiceReportLines = GetInvoiceReportLines()
+                    .Where(e => e.InvoiceDate.Between(start, end))
+                    .ToArray();
+                
                 incomeWorksheet.Cells["A1"].LoadFromCollection(invoiceReportLines, true, TableStyles.Light1);
+
+                UpdateFormattingFromCollection(invoiceReportLines, incomeWorksheet);
 
 /*
                 //Format the header for column 1-3
@@ -176,8 +180,25 @@ namespace MoneyHawk.Web.Controllers
                 }
 */
 
-                return File(excelPackage.GetAsByteArray(),
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+                return File(excelPackage.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+            }
+        }
+
+        private static void UpdateFormattingFromCollection<T>(ICollection<T> expenseReportLines, ExcelWorksheet expenseWorksheet)
+        {
+            var type = typeof(T);
+            var propertyInfos = type.GetProperties();
+            for (var index = 0; index < propertyInfos.Length; index++)
+            {
+                var property = propertyInfos[index];
+                var col = (char) ('A' + index);
+                var address = col + "1" + ":" + col + (expenseReportLines.Count + 1);
+
+                if (property.PropertyType == typeof (DateTime) || property.PropertyType == typeof (DateTime?))
+                    expenseWorksheet.Cells[address].Style.Numberformat.Format =
+                        Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
+                else if (property.PropertyType == typeof (DateTime) || property.PropertyType == typeof (DateTime?))
+                    expenseWorksheet.Cells[address].Style.Numberformat.Format = "#,##0.00";
             }
         }
     }

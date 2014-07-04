@@ -1,38 +1,27 @@
-﻿@using MoneyHawk.Web.Controllers
-@using MoneyHawk.Core
-@using Net.System
-@using Net.Web
-@model List<MoneyHawk.Web.Controllers.ExpenseLineWithRelations>
+﻿@using Net.System
+@using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime
+@model dynamic
 
 @{
-    ViewBag.Title = "Expense report";
-    Layout = "../Shared/DataOnly.cshtml";
-  }
-
-@{
-    var grid = new WebGrid<ExpenseLineWithRelations>(source:Model, rowsPerPage:200);     
+    ViewBag.Title = "Income/";
 }
 
-<div id="grid">
-    @grid.GetHtml(
-                tableStyle: "grid",
-        headerStyle: "head",
-        alternatingRowStyle: "alt",
-        columns: grid.Columns(
-                    grid.Col("InvoiceDate", "Datum", line => line.Expense.InvoiceDate.To<String>("d")),
-                    grid.Col("Description", "Naam", line => line.Details.Description),
-                    grid.Col("Price Inc", "incl btw", line => line.Details.TotalPriceInclTax.To<String>("0.00")),
-                    grid.Col("Tax", "%", line => line.Details.Tax.To<String>("0 %")),
-                    grid.Col("Price Ex", "ex", line => line.Details.TotalPriceExclTax.To<String>("0.00")),
-                    grid.Col("TaxAmount", "btw", line => (line.Details.TotalPriceInclTax - line.Details.TotalPriceExclTax).To<String>("0.00")),
-                    grid.Col("Kind1", "soort", line => line.Type1),
-                    grid.Col("Kind2", "soort", line => line.Type2),
-                    grid.Col("Invoice", "factuurnummer", line => line.Expense.InvoiceId),
-                    grid.Col("ContactId", "contact nr", line => line.Contact.Id),
-                    grid.Col("Contact", "contact naam", line => line.Contact.Name),
-                    grid.Col("LedgerId", "grootboekrekening", line => line.Ledger.LedgerAccountId),
-                    grid.Col("Ledger", "grootboekrekeningnaam", line => line.Ledger.Name),
-                    grid.Col("Price", "prijs", line => line.Details.Price.To<String>("0.00"))
-            )
-        )
-</div>
+<h2>Dates</h2>
+
+<p>@Html.ActionLink("All expenses as HTML table", "Expenses")</p>
+<ul>
+    @for (var year = DateTime.Now.Year - 3; year <= DateTime.Now.Year; year++)
+    {
+        <li>
+            @Html.ActionLink(year.To<string>(), "Export", new { start = new DateTime(year, 1, 1), end = new DateTime(year, 12, 31) })
+            <ul>
+                @for (int month = 1; month <= 12; month++)
+                {
+                    var start = new DateTime(year, month, 1);
+                    var end = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                    <li>@Html.ActionLink(start.ToString("MMM"), "Export", new { start, end })</li>
+                }
+            </ul>
+        </li>
+    }
+</ul>

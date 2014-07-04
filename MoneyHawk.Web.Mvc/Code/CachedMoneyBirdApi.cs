@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System;
@@ -210,6 +211,11 @@ namespace MoneyHawk.Web.Controllers
         public TResponse Get<TResponse>(string relativeOrAbsoluteUrl)
         {
             return cache.GetOrAdd(relativeOrAbsoluteUrl, () => cachedClient.Get<TResponse>(relativeOrAbsoluteUrl));
+        }
+
+        public IEnumerable<TResponse> GetLazy<TResponse>(IReturn<QueryResponse<TResponse>> queryDto)
+        {
+            return cachedClient.GetLazy(queryDto);
         }
 
         public HttpWebResponse Delete(IReturnVoid requestDto)
