@@ -197,7 +197,7 @@ namespace MoneyHawk.Web.Controllers
                 if (property.PropertyType == typeof (DateTime) || property.PropertyType == typeof (DateTime?))
                     expenseWorksheet.Cells[address].Style.Numberformat.Format =
                         Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
-                else if (property.PropertyType == typeof (DateTime) || property.PropertyType == typeof (DateTime?))
+                else if (property.PropertyType == typeof (decimal) || property.PropertyType == typeof (decimal?))
                     expenseWorksheet.Cells[address].Style.Numberformat.Format = "#,##0.00";
             }
         }
