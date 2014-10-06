@@ -43,7 +43,8 @@ namespace MoneyHawk.Web.Controllers
                 .SelectMany(
                     incomingInvoice =>
                         incomingInvoice.Details.Select(details => new {Expense = incomingInvoice, Details = details}))
-                .Where(e => e.Expense.ContactId.HasValue && e.Details.LedgerAccountId.HasValue);
+                .Where(e => e.Expense.ContactId.HasValue && e.Details.LedgerAccountId.HasValue)
+                .OrderBy(e=>e.Expense.InvoiceDate);
 
             var contacts = GetContacts();
             var ledgerAccounts = api.LedgerAccounts.GetAll();
