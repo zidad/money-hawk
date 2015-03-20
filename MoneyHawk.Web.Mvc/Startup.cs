@@ -1,8 +1,9 @@
 ﻿using Microsoft.Owin;
+using MoneyHawk.Web;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(MoneyHawk.Web.Mvc.Startup))]
-namespace MoneyHawk.Web.Mvc
+[assembly: OwinStartup(typeof(Startup))]
+namespace MoneyHawk.Web
 {
     public partial class Startup
     {
