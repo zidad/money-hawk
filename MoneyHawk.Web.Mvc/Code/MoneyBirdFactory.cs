@@ -2,7 +2,6 @@ using System;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Owin.Security;
 using MoneyHawk.Core;
 using MoneyHawk.Web.Mvc.Models;
 using Net.Text;
