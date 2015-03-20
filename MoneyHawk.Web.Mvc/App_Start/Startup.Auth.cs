@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System;
+using System.Configuration;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 
-namespace MoneyHawk.Web.Mvc
+namespace MoneyHawk.Web
 {
     public partial class Startup
     {
@@ -32,7 +34,19 @@ namespace MoneyHawk.Web.Mvc
             //   appId: "",
             //   appSecret: "");
 
-            app.UseGoogleAuthentication();
+            var moneyHawkGoogleClientId = ConfigurationManager.AppSettings["MoneyHawkGoogleClientId"];
+            var moneyHawkGoogleClientSecret = ConfigurationManager.AppSettings["MoneyHawkGoogleClientSecret"];
+
+            if (string.IsNullOrEmpty(moneyHawkGoogleClientId))
+                moneyHawkGoogleClientId = Environment.GetEnvironmentVariable("MoneyHawkGoogleClientId");
+
+            if (string.IsNullOrEmpty(moneyHawkGoogleClientSecret))
+                moneyHawkGoogleClientSecret = Environment.GetEnvironmentVariable("MoneyHawkGoogleClientSecret");
+
+            if (!string.IsNullOrEmpty(moneyHawkGoogleClientId) && !string.IsNullOrEmpty(moneyHawkGoogleClientSecret))
+                app.UseGoogleAuthentication(moneyHawkGoogleClientId, moneyHawkGoogleClientSecret);
+
+
         }
     }
 }
