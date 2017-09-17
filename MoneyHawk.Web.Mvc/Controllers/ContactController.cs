@@ -1,24 +1,22 @@
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using MoneyHawk.Core;
-using MoneyHawk.Web.Controllers;
 
 namespace MoneyHawk.Web.Controllers
 {
     [Authorize]
     public class ContactController : Controller
     {
-        private readonly IMoneyBirdApi moneybird;
+        readonly IMoneyBirdClient moneybird;
 
-        public ContactController()
+        public ContactController(MoneyBirdClient moneybird)
         {
-            moneybird = MoneyBirdFactory.GetInstance();
-            //moneybird = MoneyBirdFactory.GetInstanceOAuth();
+            this.moneybird = moneybird;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var contacts = moneybird.Contacts.GetAll();
+            var contacts = await moneybird.Contacts.GetAll();
 
             return View(contacts);
         }

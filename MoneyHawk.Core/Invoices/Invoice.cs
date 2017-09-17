@@ -8,10 +8,10 @@ namespace MoneyHawk.Core.Invoices
     public class Invoice
     {
         [DataMember(Name = "id")]
-        public int? Id { get; set; }
+        public string Id { get; set; }
 
         [DataMember(Name = "contact_id")]
-        public int? ContactId { get; set; }
+        public string ContactId { get; set; }
 
         [DataMember(Name = "customer_id")]
         public string CustomerId { get; set; }

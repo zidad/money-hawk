@@ -1,25 +1,22 @@
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using MoneyHawk.Core;
-using MoneyHawk.Web.Controllers;
 
 namespace MoneyHawk.Web.Controllers
 {
     [Authorize]
     public class ExpenseController : Controller
     {
-        private readonly IMoneyBirdApi moneybird;
+        readonly IMoneyBirdClient moneybird;
 
-        public ExpenseController()
+        public ExpenseController(MoneyBirdClient moneybird)
         {
-            //moneybird = MoneyBirdFactory.GetInstanceOAuth();
-            moneybird = MoneyBirdFactory.GetInstance();
+            this.moneybird = moneybird;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            IEnumerable<IncomingInvoice> allInvoices = moneybird.IncomingInvoices.GetAll();
+            var allInvoices = await moneybird.PurchaseInvoices.GetAll();
 
             return View(allInvoices);
         }

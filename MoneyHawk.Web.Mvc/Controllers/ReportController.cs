@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MoneyHawk.Core;
-using MoneyHawk.Core.Invoices;
+using MoneyHawk.Web.Models;
 using Net.System;
-using Net.Text;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
-using ServiceStack;
 
 namespace MoneyHawk.Web.Controllers
 {
     [Authorize]
     public class ReportController : Controller
     {
-        private readonly IMoneyBirdApi api;
+        readonly IMoneyBirdClient client;
 
-        public ReportController()
+        public ReportController(MoneyBirdClient client)
         {
-            api = MoneyBirdFactory.GetInstance();
+            this.client = client;
         }
 
         public ActionResult Index()
@@ -28,115 +27,121 @@ namespace MoneyHawk.Web.Controllers
             return View();
         }
 
-        public ActionResult Expenses()
+        public async Task<ActionResult> Expenses(DateTime? start = null, DateTime? end = null)
         {
-            var expenseLines = GetExpenseLinesWithContact();
+            var expenseLines = await GetExpenseLinesWithRelations(start ?? DateTime.Now.AddYears(-1), DateTime.Now);
 
             return View(expenseLines);
         }
 
-        private List<ExpenseLineWithRelations> GetExpenseLinesWithContact()
+        async Task<List<ExpenseLineWithRelations>> GetExpenseLinesWithRelations(DateTime start, DateTime end)
         {
-            var incomingInvoices = api.IncomingInvoices.GetAll();
+            var incomingInvoices = await client.PurchaseInvoices.Filter(start, end);
 
             var invoiceLines = incomingInvoices
                 .SelectMany(
                     incomingInvoice =>
-                        incomingInvoice.Details.Select(details => new {Expense = incomingInvoice, Details = details}))
+                        incomingInvoice.Details.Select(details => new {
+                            Expense = incomingInvoice,
+                            Details = details
+                        }))
                 .Where(e => e.Expense.ContactId.HasValue && e.Details.LedgerAccountId.HasValue)
-                .OrderBy(e=>e.Expense.InvoiceDate);
+                .OrderBy(e=>e.Expense.Date);
 
-            var contacts = GetContacts();
-            var ledgerAccounts = api.LedgerAccounts.GetAll();
+            //var contacts = await GetContacts();
+            var ledgerAccounts = await client.LedgerAccounts.GetAll();
+            var taxes = (await GetTaxRates()).ToArray();
 
             var lines = from expense in invoiceLines
-                join contact in contacts on expense.Expense.ContactId.Value equals contact.Id
-                join ledger in ledgerAccounts on expense.Details.LedgerAccountId.Value equals ledger.Id
+                //join contact in contacts on expense.Expense.ContactId equals contact.Id
+                join ledger in ledgerAccounts on expense.Details.LedgerAccountId equals ledger.Id
                 select
                     new ExpenseLineWithRelations
                     {
                         Expense = expense.Expense,
-                        Details = expense.Details,
-                        Contact = contact,
+                        Line = expense.Details,
+                        Tax = expense.Details.TaxRateId.SelectValue(a=>taxes.FirstOrDefault(t=>t.Id==a)),
+                        //Contact = contact,
                         Ledger = ledger
                     };
 
-            var expenseLines = lines.Where(e => !e.Details.Description.ContainsIgnoreCase("Prive")).ToList();
+            var expenseLines = lines.ToList();
             return expenseLines;
         }
 
-        private IEnumerable<Contact> GetContacts()
+        async Task<IEnumerable<Contact>> GetContacts()
         {
-            var contacts = api.Contacts.GetAll();
+            var contacts = await client.Contacts.GetAll();
             return contacts;
         }
 
-        private IEnumerable<Invoice> GetInvoices()
+        async Task<IEnumerable<SalesInvoice>> GetInvoices(DateTime start, DateTime end)
         {
-            return api.Invoices.GetAll().Where(c => c.ContactId.HasValue);
+            return (await client.SalesInvoices.Filter(start, end)).Where(c => c.ContactId.HasValue);
         }
 
-        private IEnumerable<InvoiceReportLine> GetInvoiceReportLines()
+        async Task<IEnumerable<TaxRate>> GetTaxRates()
         {
-            return InvoiceLinesWithContacts().Select(i => new InvoiceReportLine
+            return (await client.TaxRates.GetAll());
+        }
+
+        public async Task <IEnumerable<InvoiceReportLine>> GetSalesInvoiceReportLines(DateTime start, DateTime end)
+        {
+            return (await InvoiceLinesWithRelations(start, end))
+                .Select(i => new InvoiceReportLine
+                    {
+                        InvoiceNumber = i.Invoice.InvoiceId,
+                        InvoiceDate = i.Invoice.InvoiceDate,
+                        CustomerName = i.Invoice.Contact.CompanyName,
+                        TotalPriceExclTax = i.Line.TotalPriceExclTaxWithDiscount,
+                        TaxPercentage = i.Tax.Percentage,
+                        TotalPriceInclTax = i.Line.TotalPriceExclTaxWithDiscount + ((i.Tax.Percentage * i.Line.TotalPriceExclTaxWithDiscount)*0.01m),
+                        TotalTax = ((i.Tax.Percentage * i.Line.TotalPriceExclTaxWithDiscount) * 0.01m),
+                        Paid = i.Invoice.State
+                    });
+        }
+
+        public async Task<IEnumerable<ExpenseReportLine>> GetExpenseReportLines(DateTime start, DateTime end)
+        {
+            return (await GetExpenseLinesWithRelations(start, end)).Select(i => new ExpenseReportLine
             {
-                InvoiceNumber = i.Invoice.InvoiceId,
-                InvoiceDate = i.Invoice.InvoiceDate,
-                CustomerName = i.Contact.Name,
-                TotalPriceExclTax = i.Details.TotalPriceExclTax,
-                TaxPercentage = i.Details.Tax,
-                TotalPriceInclTax = i.Details.TotalPriceInclTax,
-                TotalTax = i.Details.TotalPriceInclTax - i.Details.TotalPriceExclTax,
-                Paid = i.Invoice.State
+                Contact = i.Expense.Contact.CompanyName,
+                ContactId = i.Expense.Contact.Id,
+                Ledger = i.Ledger.Name,
+                LedgerId = i.Ledger.AccountId,
+                InvoiceDate = i.Expense.Date, //.To<String>("d")),
+                Description = i.Line.Description,
+                Tax = i.Line.TotalPriceExclTaxWithDiscount * (i.Tax.Percentage * 0.01m), //.To<String>("0 %")),
+                TaxPercentage = i.Tax.Percentage, //.To<String>("0 %")),
+                TotalPriceExclTax = i.Line.TotalPriceExclTaxWithDiscount, //.To<String>("0.00")),
+                Kind1 = i.Ledger.Name.Split('-').Skip(1).FirstOrDefault() ?? "",
+                Kind2 = i.Ledger.Name.Split('-').Skip(2).FirstOrDefault() ?? "",
+                Invoice = i.Expense.Reference,
+                TotalPriceInclTax = i.Line.TotalPriceExclTaxWithDiscount + ((i.Line.TotalPriceExclTaxWithDiscount * i.Tax.Percentage) * 0.01m) //.To<String>("0.00"))
             });
         }
 
-        private IEnumerable<ExpenseReportLine> GetExpenseReportLines()
+        async Task<IEnumerable<InvoiceLineWithRelations>> InvoiceLinesWithRelations(DateTime start, DateTime end)
         {
-            return GetExpenseLinesWithContact().Select(line => new ExpenseReportLine
-            {
-                InvoiceDate = line.Expense.InvoiceDate, //.To<String>("d")),
-                Description = line.Details.Description,
-                TotalPriceIncTax = line.Details.TotalPriceInclTax, //.To<String>("0.00")),
-                Tax = line.Details.Tax, //.To<String>("0 %")),
-                TotalPriceExclTax = line.Details.TotalPriceExclTax, //.To<String>("0.00")),
-                TotalPriceInclTax = line.Details.TotalPriceInclTax, // - line.Details.TotalPriceExclTax)
-                Kind1 = line.Type1,
-                Kind2 = line.Type2,
-                Invoice = line.Expense.InvoiceId,
-                ContactId = line.Contact.Id,
-                Contact = line.Contact.Name,
-                LedgerId = line.Ledger.LedgerAccountId,
-                Ledger = line.Ledger.Name,
-                Price = line.Details.Price //.To<String>("0.00"))
-            });
-        }
+            //var contacts = await GetContacts();
+            var invoices = await GetInvoices(start, end);
+            var taxRates = await GetTaxRates();
 
-        private IEnumerable<InvoiceLineWithRelations> InvoiceLinesWithContacts()
-        {
-            var contacts = GetContacts();
-
-            var invoiceLines = GetInvoices()
+            var invoiceLines = invoices
                 .SelectMany(invoice => invoice.Details.Select(details =>
-                    new
+                    new InvoiceLineWithRelations
                     {
                         Invoice = invoice,
-                        Details = details
+                        Line = details,
+                        Tax = details.TaxRateId.SelectValue(a=>taxRates.FirstOrDefault(tr=>tr.Id==a))
                     }));
 
-            var invoiceLinesWithContacts = from invoice in invoiceLines
-                join contact in contacts on invoice.Invoice.ContactId equals contact.Id
-                select new InvoiceLineWithRelations { 
-                    Invoice = invoice.Invoice, 
-                    Details = invoice.Details, 
-                    Contact = contact
-                };
 
-            return invoiceLinesWithContacts;
+            return invoiceLines;
         }
 
         [HttpGet]
-        public ActionResult Export(DateTime start, DateTime end)
+        public async Task<ActionResult> Export(DateTime start, DateTime end)
         {
             using (var excelPackage = new ExcelPackage())
             {
@@ -144,22 +149,25 @@ namespace MoneyHawk.Web.Controllers
                 var expenseWorksheet = excelPackage.Workbook.Worksheets.Add("Uitgaven");
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
-                var expenseReportLines = GetExpenseReportLines()
+                var reportLines = await GetExpenseReportLines(start, end);
+
+                var expenseReportLines = reportLines
                     .Where(e=>e.InvoiceDate.Between(start, end))
                     .ToArray();
 
-                expenseWorksheet.Cells["A1"].LoadFromCollection(expenseReportLines, true, TableStyles.Light1);
-
+                var expenseTable = expenseWorksheet.Cells["A1"].LoadFromCollection(expenseReportLines, true, TableStyles.Light1);
+                //expenseTable.Table.Name = "Expenses";
                 UpdateFormattingFromCollection(expenseReportLines, expenseWorksheet);
 
                 var incomeWorksheet = excelPackage.Workbook.Worksheets.Add("Inkomsten");
 
                 //Load the collection into the sheet, starting from cell A1. Print the column names on row 1
-                var invoiceReportLines = GetInvoiceReportLines()
+                var invoiceReportLines = (await GetSalesInvoiceReportLines(start, end))
                     .Where(e => e.InvoiceDate.Between(start, end))
                     .ToArray();
-                
-                incomeWorksheet.Cells["A1"].LoadFromCollection(invoiceReportLines, true, TableStyles.Light1);
+
+                var invoicesTable = incomeWorksheet.Cells["A1"].LoadFromCollection(invoiceReportLines, true, TableStyles.Light1);
+                //invoicesTable.Table.Name = "Invoices";
 
                 UpdateFormattingFromCollection(invoiceReportLines, incomeWorksheet);
 
@@ -185,7 +193,7 @@ namespace MoneyHawk.Web.Controllers
             }
         }
 
-        private static void UpdateFormattingFromCollection<T>(ICollection<T> expenseReportLines, ExcelWorksheet expenseWorksheet)
+        static void UpdateFormattingFromCollection<T>(ICollection<T> expenseReportLines, ExcelWorksheet expenseWorksheet)
         {
             var type = typeof(T);
             var propertyInfos = type.GetProperties();
@@ -193,13 +201,15 @@ namespace MoneyHawk.Web.Controllers
             {
                 var property = propertyInfos[index];
                 var col = (char) ('A' + index);
-                var address = col + "1" + ":" + col + (expenseReportLines.Count + 1);
+                var address = $"{col}1:{col}{expenseReportLines.Count + 1}";
 
                 if (property.PropertyType == typeof (DateTime) || property.PropertyType == typeof (DateTime?))
                     expenseWorksheet.Cells[address].Style.Numberformat.Format =
                         Thread.CurrentThread.CurrentUICulture.DateTimeFormat.ShortDatePattern;
                 else if (property.PropertyType == typeof (decimal) || property.PropertyType == typeof (decimal?))
                     expenseWorksheet.Cells[address].Style.Numberformat.Format = "#,##0.00";
+                else if (property.PropertyType == typeof (long) || property.PropertyType == typeof (long?))
+                    expenseWorksheet.Cells[address].Style.Numberformat.Format = "00000000000";
             }
         }
     }

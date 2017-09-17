@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace MoneyHawk.Web.Controllers
 {
+    [DisplayName("Expenses")]
     public class ExpenseReportLine
     {
         [DisplayName("Datum")]
@@ -12,16 +13,16 @@ namespace MoneyHawk.Web.Controllers
         public string Description { get; set; }
 
         [DisplayName("incl btw")]
-        public decimal? TotalPriceIncTax { get; set; }
+        public decimal? TotalPriceInclTax { get; set; }
 
         [DisplayName("%")]
-        public decimal? Tax { get; set; }
+        public decimal? TaxPercentage { get; set; }
 
         [DisplayName("ex")]
         public decimal? TotalPriceExclTax { get; set; }
 
         [DisplayName("btw")]
-        public decimal? TotalPriceInclTax { get; set; }
+        public decimal? Tax { get; set; }
 
         [DisplayName("soort")]
         public string Kind1 { get; set; }
@@ -33,7 +34,7 @@ namespace MoneyHawk.Web.Controllers
         public string Invoice { get; set; }
 
         [DisplayName("contact nr")]
-        public int ContactId { get; set; }
+        public long ContactId { get; set; }
 
         [DisplayName("contact naa")]
         public string Contact { get; set; }
@@ -44,7 +45,9 @@ namespace MoneyHawk.Web.Controllers
         [DisplayName("grootboekrekeningnaam")]
         public string Ledger { get; set; }
 
-        [DisplayName("prijs")]
-        public decimal? Price { get; set; }
+        public override string ToString()
+        {
+            return $"{nameof(InvoiceDate)}: {InvoiceDate}, {nameof(Description)}: {Description}, {nameof(Tax)}: {Tax}, {nameof(TotalPriceExclTax)}: {TotalPriceExclTax}, {nameof(TotalPriceInclTax)}: {TotalPriceInclTax}, {nameof(Kind1)}: {Kind1}, {nameof(Kind2)}: {Kind2}, {nameof(Invoice)}: {Invoice}, {nameof(ContactId)}: {ContactId}, {nameof(Contact)}: {Contact}, {nameof(LedgerId)}: {LedgerId}, {nameof(Ledger)}: {Ledger}, {nameof(TaxPercentage)}: {TaxPercentage}";
+        }
     }
 }

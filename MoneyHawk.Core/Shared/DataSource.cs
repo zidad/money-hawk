@@ -1,6 +1,4 @@
-using System.Linq;
-using System;
-using ServiceStack;
+using System.Threading.Tasks;
 
 namespace MoneyHawk.Core
 {
@@ -8,14 +6,14 @@ namespace MoneyHawk.Core
 
     public abstract class DataSource<T>
     {
-        protected readonly IServiceClient api;
+        protected readonly MoneyBirdClient client;
 
-        public DataSource(IServiceClient api)
+        public DataSource(MoneyBirdClient client)
         {
-            this.api = api;
+            this.client = client;
         }
 
-        public abstract IEnumerable<T> GetAll();
+        public abstract Task<IEnumerable<T>> GetAll();
 
     }
 }

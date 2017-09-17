@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace MoneyHawk.Web.Controllers
 {
+    [DisplayName("Inkomsten")]
     public class InvoiceReportLine
     {
         [DisplayName("factnr")]
@@ -28,5 +29,11 @@ namespace MoneyHawk.Web.Controllers
 
         [DisplayName("Ontvangst")]
         public string Paid { get; set; }
+
+
+        public override string ToString()
+        {
+            return $"{nameof(InvoiceNumber)}: {InvoiceNumber}, {nameof(InvoiceDate)}: {InvoiceDate}, {nameof(CustomerName)}: {CustomerName}, {nameof(TotalPriceExclTax)}: {TotalPriceExclTax}, {nameof(TaxPercentage)}: {TaxPercentage}, {nameof(TotalPriceInclTax)}: {TotalPriceInclTax}, {nameof(TotalTax)}: {TotalTax}, {nameof(Paid)}: {Paid}";
+        }
     }
 }

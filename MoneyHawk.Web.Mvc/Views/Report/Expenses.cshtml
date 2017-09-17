@@ -1,8 +1,7 @@
 ﻿@using MoneyHawk.Web.Controllers
-@using MoneyHawk.Core
 @using Net.System
 @using Net.Web
-@model List<MoneyHawk.Web.Controllers.ExpenseLineWithRelations>
+@model List<ExpenseReportLine>
 
 @{
     ViewBag.Title = "Expense report";
@@ -10,7 +9,7 @@
   }
 
 @{
-    var grid = new WebGrid<ExpenseLineWithRelations>(source:Model, rowsPerPage:200);     
+    var grid = new WebGrid<ExpenseReportLine>(source:Model, rowsPerPage:200);     
 }
 
 <div id="grid">
@@ -19,20 +18,19 @@
         headerStyle: "head",
         alternatingRowStyle: "alt",
         columns: grid.Columns(
-                    grid.Col("InvoiceDate", "Datum", line => line.Expense.InvoiceDate.To<String>("d")),
-                    grid.Col("Description", "Naam", line => line.Details.Description),
-                    grid.Col("Price Inc", "incl btw", line => line.Details.TotalPriceInclTax.To<String>("0.00")),
-                    grid.Col("Tax", "%", line => line.Details.Tax.To<String>("0 %")),
-                    grid.Col("Price Ex", "ex", line => line.Details.TotalPriceExclTax.To<String>("0.00")),
-                    grid.Col("TaxAmount", "btw", line => (line.Details.TotalPriceInclTax - line.Details.TotalPriceExclTax).To<String>("0.00")),
-                    grid.Col("Kind1", "soort", line => line.Type1),
-                    grid.Col("Kind2", "soort", line => line.Type2),
-                    grid.Col("Invoice", "factuurnummer", line => line.Expense.InvoiceId),
-                    grid.Col("ContactId", "contact nr", line => line.Contact.Id),
-                    grid.Col("Contact", "contact naam", line => line.Contact.Name),
-                    grid.Col("LedgerId", "grootboekrekening", line => line.Ledger.LedgerAccountId),
-                    grid.Col("Ledger", "grootboekrekeningnaam", line => line.Ledger.Name),
-                    grid.Col("Price", "prijs", line => line.Details.Price.To<String>("0.00"))
+                    grid.Col("InvoiceDate", "Datum", line => line.InvoiceDate.To<string>("d")),
+                    grid.Col("Description", "Naam", line => line.Description),
+                    grid.Col("Price Inc", "incl btw", line => line.TotalPriceInclTax.To<string>("0.00")),
+                    grid.Col("Tax", "%", line => line.Tax.To<string>("0 %")),
+                    grid.Col("Price Ex", "ex", line => line.TotalPriceExclTax.To<string>("0.00")),
+                    grid.Col("TaxAmount", "btw", line => (line.TotalPriceInclTax - line.TotalPriceExclTax).To<string>("0.00")),
+                    grid.Col("Kind1", "soort", line => line.Kind1),
+                    grid.Col("Kind2", "soort", line => line.Kind2),
+                    grid.Col("Invoice", "factuurnummer", line => line.Invoice),
+                    grid.Col("ContactId", "contact nr", line => line.ContactId.ToString()),
+                    grid.Col("Contact", "contact naam", line => line.Contact),
+                    grid.Col("LedgerId", "grootboekrekening", line => line.LedgerId),
+                    grid.Col("Ledger", "grootboekrekeningnaam", line => line.Ledger)
             )
         )
 </div>
