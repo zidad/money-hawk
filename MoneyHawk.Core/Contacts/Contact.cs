@@ -1,106 +1,148 @@
 using System;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MoneyHawk.Core
 {
-    [DataContract]
+    /// <summary>
+    /// https://developer.moneybird.com/api/contacts/
+    /// /contacts	GET	List all contacts
+    /// /contacts/synchronization	GET	List all ids and versions
+    /// /contacts/synchronization	POST	Fetch contacts with given ids
+    /// /contacts/:id	GET	Get contact
+    /// /contacts/customer_id/:customer_id	GET	Get contact by customer id
+    /// /contacts	POST	Create a new contact
+    /// /contacts/:id	PATCH	Update a contact
+    /// /contacts/:id	DELETE	Delete a contact
+    /// /contacts/:contact_id/notes	POST	Adds note to entity
+    /// /contacts/:contact_id/notes/:id	DELETE	Destroys note from entity
+    /// </summary>
     public class Contact
     {
-        // name	String	No	Read_only, company_name or firstname + lastname
-        [DataMember(Name="name")]
-        public string Name { get; set; }
+        [JsonProperty("id")]
+        public long Id { get; set; }
 
-        // name	String	No	Read_only, company_name or firstname + lastname
-        [DataMember(Name="contact_name")]
-        public string ContactName { get; set; }
+        [JsonProperty("administration_id")]
+        public long AdministrationId { get; set; }
 
-          // address1	String	No	
-        [DataMember(Name = "address1")]
-        public string Address1 { get; set; }
-        
-          // address2	String	No	
-        [DataMember(Name = "address2")]
-        public string Address2 { get; set; }
-        
-          // attention	String	No	
-        [DataMember(Name = "attention")]
-        public string Attention { get; set; }
-        
-          // bank-account	String	No	
-        [DataMember(Name = "bank_account")]
-        public string BankAccount { get; set; }	
-        
-        // chamber-of-commerce	String	No	
-        [DataMember(Name = "chamber_of_commerce")]
-        public string ChamberOfCommerce { get; set; }
-        
-        // city	String	No	
-        [DataMember(Name = "city")]
-        public string City { get; set; }
-        
-        // company_name	String	Yes	At least a company_name, firstname or lastname is required
-        [DataMember(Name = "company_name")]
+        [JsonProperty("company_name")]
         public string CompanyName { get; set; }
-        
-        // contact_hash	String	No	Read_only, unique hash for the contact
-        [DataMember(Name = "contact_hash")]
-        public string ContactHash { get; set; }
-                
-        // country	String	No	
-        [DataMember(Name = "country")]
-        public string Country { get; set; }
-        
-        // created_at	Datetime	No	Read_only, for example: 2011_02_15T13:13:50+01:00
-        [DataMember(Name = "created_at")]
-        public DateTime CreatedAt { get; set; }
-       
-        // customer_id	String	Yes	Unique (customer)id for the contact, for example: C100
-        [DataMember(Name = " customer_id")]
-        public string CustomerId { get; set; }
-        
-        // email	String	No	
-        [DataMember(Name = "email")]
-        public string Email { get; set; }
-        
-        // firstname	String	Yes	At least a company_name, firstname or lastname is required
-        [DataMember(Name = "firstname")]
+
+        [JsonProperty("firstname")]
         public string Firstname { get; set; }
-        
-        // id	Integer	No	Read_only, the unique id of the contact
-        [DataMember(Name = "id")]
-        public int Id { get; set; }
-        
-        // lastname	String	Yes	At least a company_name, firstname or lastname is required
-        [DataMember(Name = "lastname")]
+
+        [JsonProperty("lastname")]
         public string Lastname { get; set; }
-                
-        // phone	String	No	
-        [DataMember(Name = "phone")]
-        public string Phone { get; set; }
-        
-        // revision	Integer	No	Read_only, incremental integer, increases if contact is updated
-        [DataMember(Name = "revision")]
-        public int Revision { get; set; }
-        
-        // send_method	String	No	Allowed values: email, hand or post, default: email
-        [DataMember(Name = "send_method")]
-        public string SendMethod { get; set; }
-        
-        // tax_number	String	No	
-        [DataMember(Name = "tax_number")]
-        public string TaxNumber { get; set; }
-        
-        // updated_at	Datetime	No	Read_only, for example: 2011_02_15T13:13:50+01:00
-        [DataMember(Name = "updated_at")]
-        public DateTime UpdatedAt { get; set; }
-        
-        // zipcode	String	No	
-        [DataMember(Name = "zipcode")]
+
+        [JsonProperty("address1")]
+        public string Address1 { get; set; }
+
+        [JsonProperty("address2")]
+        public string Address2 { get; set; }
+
+        [JsonProperty("zipcode")]
         public string Zipcode { get; set; }
+
+        [JsonProperty("city")]
+        public string City { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
+
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        [JsonProperty("delivery_method")]
+        public string DeliveryMethod { get; set; }
+
+        [JsonProperty("customer_id")]
+        public long CustomerId { get; set; }
+
+        [JsonProperty("tax_number")]
+        public string TaxNumber { get; set; }
+
+        [JsonProperty("chamber_of_commerce")]
+        public string ChamberOfCommerce { get; set; }
+
+        [JsonProperty("bank_account")]
+        public string BankAccount { get; set; }
+
+        [JsonProperty("attention")]
+        public string Attention { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("email_ubl")]
+        public bool EmailUbl { get; set; }
+
+        [JsonProperty("send_invoices_to_attention")]
+        public string SendInvoicesToAttention { get; set; }
+
+        [JsonProperty("send_invoices_to_email")]
+        public string SendInvoicesToEmail { get; set; }
+
+        [JsonProperty("send_estimates_to_attention")]
+        public string SendEstimatesToAttention { get; set; }
+
+        [JsonProperty("send_estimates_to_email")]
+        public string SendEstimatesToEmail { get; set; }
+
+        [JsonProperty("sepa_active")]
+        public bool SepaActive { get; set; }
+
+        [JsonProperty("sepa_iban")]
+        public string SepaIban { get; set; }
+
+        [JsonProperty("sepa_iban_account_name")]
+        public string SepaIbanAccountName { get; set; }
+
+        [JsonProperty("sepa_bic")]
+        public string SepaBic { get; set; }
+
+        [JsonProperty("sepa_mandate_id")]
+        public string SepaMandateId { get; set; }
+
+        [JsonProperty("sepa_mandate_date")]
+        public string SepaMandateDate { get; set; }
+
+        [JsonProperty("sepa_sequence_type")]
+        public string SepaSequenceType { get; set; }
+
+        [JsonProperty("credit_card_number")]
+        public string CreditCardNumber { get; set; }
+
+        [JsonProperty("credit_card_reference")]
+        public string CreditCardReference { get; set; }
+
+        [JsonProperty("credit_card_type")]
+        public object CreditCardType { get; set; }
+
+        [JsonProperty("tax_number_validated_at")]
+        public object TaxNumberValidatedAt { get; set; }
+
+        [JsonProperty("created_at")]
+        public DateTimeOffset CreatedAt { get; set; }
+
+        [JsonProperty("updated_at")]
+        public DateTimeOffset UpdatedAt { get; set; }
+
+        [JsonProperty("sales_invoices_url")]
+        public string SalesInvoicesUrl { get; set; }
+
+        [JsonProperty("notes")]
+        public IList<JObject> Notes { get; set; }
+
+        [JsonProperty("custom_fields")]
+        public IList<JObject> CustomFields { get; set; }
+
+        [JsonProperty("events")]
+        public IList<Event> Events { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Id: {4}, Name: {0} CompanyName: {1}, ContactName: {2}, Country: {3}", Name, CompanyName, ContactName, Country, Id);
+            return $"{nameof(Id)}: {Id}, {nameof(CompanyName)}: {CompanyName}, {nameof(Firstname)}: {Firstname}, {nameof(Lastname)}: {Lastname}, {nameof(Email)}: {Email}";
         }
     }
 }

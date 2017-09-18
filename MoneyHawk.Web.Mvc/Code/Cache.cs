@@ -1,4 +1,3 @@
-using System.Linq;
 using System;
 
 namespace MoneyHawk.Web.Controllers
@@ -7,8 +6,8 @@ namespace MoneyHawk.Web.Controllers
 
     public class Cache
     {
-        private readonly CacheItemPolicy policy = new CacheItemPolicy { SlidingExpiration = TimeSpan.FromHours(1) };
-        private readonly ObjectCache cache = MemoryCache.Default;
+        readonly CacheItemPolicy policy = new CacheItemPolicy { SlidingExpiration = TimeSpan.FromHours(1) };
+        readonly ObjectCache cache = MemoryCache.Default;
 
         public void Add(string key, object value)
         {

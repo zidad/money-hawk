@@ -37,28 +37,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Net.Core, Version=0.1.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Net.Core.0.1.8.0\lib\net40\Net.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Client, Version=4.0.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Client.4.0.38\lib\net40\ServiceStack.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Common, Version=4.0.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Common.4.0.38\lib\net40\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e06fbc6124f57c43, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Interfaces.4.0.38\lib\portable-wp80+sl5+net40+win8+monotouch+monoandroid\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=4.0.38.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ServiceStack.Text.4.0.38\lib\net40\ServiceStack.Text.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,27 +55,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contacts\Administration.cs" />
     <Compile Include="Contacts\Contact.cs" />
-    <Compile Include="Contacts\ContactDataSource.cs" />
-    <Compile Include="Contacts\ContactWrapper.cs" />
-    <Compile Include="IncomingInvoices\IncomingInvoiceWrapper.cs" />
-    <Compile Include="IncomingInvoices\Payment.cs" />
-    <Compile Include="Invoices\InvoiceWrapper.cs" />
-    <Compile Include="LedgerAccounts\LedgerAccount.cs" />
-    <Compile Include="LedgerAccounts\LedgerAccountDataSource.cs" />
-    <Compile Include="Shared\Attachment.cs" />
-    <Compile Include="IncomingInvoices\IncomingInvoice.cs" />
-    <Compile Include="Shared\Details.cs" />
-    <Compile Include="Shared\History.cs" />
-    <Compile Include="IncomingInvoices\IncomingInvoicesDataSource.cs" />
+    <Compile Include="Contacts\Contacts.cs" />
+    <Compile Include="Contacts\Data.cs" />
+    <Compile Include="Contacts\Line.cs" />
+    <Compile Include="Contacts\Event.cs" />
+    <Compile Include="Contacts\LedgerAccount.cs" />
+    <Compile Include="Contacts\PurchaseInvoice.cs" />
+    <Compile Include="Contacts\PurchaseInvoices.cs" />
+    <Compile Include="Contacts\Receipt.cs" />
+    <Compile Include="Contacts\SalesInvoice.cs" />
+    <Compile Include="Contacts\LedgerAccounts.cs" />
+    <Compile Include="Contacts\Receipts.cs" />
+    <Compile Include="Contacts\TaxRate.cs" />
+    <Compile Include="Contacts\TaxRates.cs" />
     <Compile Include="Shared\DataSource.cs" />
-    <Compile Include="Invoices\Invoice.cs" />
-    <Compile Include="Invoices\InvoiceDataSource.cs" />
-    <Compile Include="Invoices\InvoiceList.cs" />
-    <Compile Include="Invoices\InvoiceSelection.cs" />
-    <Compile Include="Shared\IMoneyBirdApi.cs" />
-    <Compile Include="Shared\MoneyBirdApi.cs" />
-    <Compile Include="Invoices\InvoicePayment.cs" />
+    <Compile Include="Contacts\SalesInvoices.cs" />
+    <Compile Include="Shared\IMoneyBirdClient.cs" />
+    <Compile Include="Shared\MoneyBirdClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,13 +83,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Estimates\" />
-    <Folder Include="Profiles\" />
-    <Folder Include="Recurring\" />
-    <Folder Include="Reports\" />
+    <Folder Include="Invoices\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

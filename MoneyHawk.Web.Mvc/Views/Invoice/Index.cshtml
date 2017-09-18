@@ -1,13 +1,13 @@
-﻿@using MoneyHawk.Core.Invoices
+﻿@using MoneyHawk.Core
 @using Net.Web
-@model IEnumerable<MoneyHawk.Core.Invoices.Invoice>
+@model IEnumerable<SalesInvoice>
 
 @{
     ViewBag.Title = "Invoices";
 }
 
 @{
-    var grid = new WebGrid<Invoice>(source:Model); 
+    var grid = new WebGrid<SalesInvoice>(source:Model); 
 }
 
 <div id="grid">

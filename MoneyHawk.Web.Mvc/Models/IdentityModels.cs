@@ -1,5 +1,4 @@
-﻿using System.Data.Entity.SqlServer;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MoneyHawk.Web.Mvc.Models
 {

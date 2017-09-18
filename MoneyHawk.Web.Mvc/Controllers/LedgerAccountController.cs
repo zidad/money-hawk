@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MoneyHawk.Core;
 
@@ -8,17 +9,16 @@ namespace MoneyHawk.Web.Controllers
     [Authorize]
     public class LedgerAccountController : Controller
     {
-        private readonly IMoneyBirdApi moneybird;
+        readonly IMoneyBirdClient moneybird;
 
-        public LedgerAccountController()
+        public LedgerAccountController(MoneyBirdClient moneybird)
         {
-            moneybird = MoneyBirdFactory.GetInstance();
-            //moneybird = MoneyBirdFactory.GetInstanceOAuth();
+            this.moneybird = moneybird;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            IList<LedgerAccount> ledgerAccounts = moneybird.LedgerAccounts.GetAll().ToList();
+            IList<LedgerAccount> ledgerAccounts = (await moneybird.LedgerAccounts.GetAll()).ToList();
 
             return View(ledgerAccounts);
         }

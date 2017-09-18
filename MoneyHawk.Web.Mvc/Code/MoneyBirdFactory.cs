@@ -10,7 +10,7 @@ namespace MoneyHawk.Web.Controllers
 {
     public static class MoneyBirdFactory
     {
-        public static IMoneyBirdApi GetInstance()
+        public static IMoneyBirdClient GetInstance()
         {
             var manager =  HttpContext.Current.GetOwinContext().Authentication;
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
@@ -23,8 +23,8 @@ namespace MoneyHawk.Web.Controllers
             if (username.HasNoValue() || password.HasNoValue() || subdomain.HasNoValue())
                 throw new Exception("Missing data account, please log in");
 
-            var defaultRestClient = MoneyBirdApi.CreateDefaultRestClient(subdomain, username, password);
-            return new CachedMoneyBirdApi(defaultRestClient);
+            var defaultRestClient = MoneyBirdClient.CreateDefaultRestClient(subdomain, username, password);
+            return new CachedMoneyBirdClient(defaultRestClient);
         }
     }
 }
