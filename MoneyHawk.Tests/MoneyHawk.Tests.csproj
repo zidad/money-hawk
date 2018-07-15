@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReceiptTests.cs" />
     <Compile Include="PurchaseInvoiceTests.cs" />
     <Compile Include="AuthorizationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

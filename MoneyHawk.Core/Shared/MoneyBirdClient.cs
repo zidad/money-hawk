@@ -41,6 +41,7 @@ namespace MoneyHawk.Core
 
         public PurchaseInvoices PurchaseInvoices => new PurchaseInvoices(this);
 
+
         /*class DecimalConverter : JsonConverter
         {
             readonly CultureInfo formatProvider = CultureInfo.GetCultureInfo("nl-NL");

@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace MoneyHawk.Core
 {
-    public class PurchaseInvoice
-    {
-        [JsonProperty("id")]
+    public class Purchase
+    { 
+            [JsonProperty("id")]
         public long Id { get; set; }
 
         [JsonProperty("administration_id")]
@@ -86,7 +86,10 @@ namespace MoneyHawk.Core
 
         [JsonProperty("events")]
         public IList<Event> Events { get; set; }
+    }
 
+    public class PurchaseInvoice : Purchase
+    {
         public override string ToString()
         {
             return $"{nameof(Id)}: {Id}, {nameof(Date)}: {Date}, {nameof(ContactId)}: {ContactId}, {nameof(Contact)}: {Contact}, {nameof(Reference)}: {Reference}, {nameof(TotalPriceExclTax)}: {TotalPriceExclTax}, {nameof(TotalPriceExclTaxBase)}: {TotalPriceExclTaxBase}, {nameof(TotalPriceInclTax)}: {TotalPriceInclTax}, {nameof(TotalPriceInclTaxBase)}: {TotalPriceInclTaxBase}";

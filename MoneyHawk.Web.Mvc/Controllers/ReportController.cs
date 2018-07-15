@@ -36,13 +36,16 @@ namespace MoneyHawk.Web.Controllers
 
         async Task<List<ExpenseLineWithRelations>> GetExpenseLinesWithRelations(DateTime start, DateTime end)
         {
-            var incomingInvoices = await client.PurchaseInvoices.Filter(start, end);
+            var purchaseInvoices = await client.PurchaseInvoices.Filter(start, end);
+            var receipts = await client.Receipts.Filter(start, end);
 
-            var invoiceLines = incomingInvoices
+            var invoiceLines = purchaseInvoices
+                .OfType<Purchase>()
+                .Concat(receipts)
                 .SelectMany(
-                    incomingInvoice =>
-                        incomingInvoice.Details.Select(details => new {
-                            Expense = incomingInvoice,
+                    purchaseInvoice =>
+                        purchaseInvoice.Details.Select(details => new {
+                            Expense = purchaseInvoice,
                             Details = details
                         }))
                 .Where(e => e.Expense.ContactId.HasValue && e.Details.LedgerAccountId.HasValue)
