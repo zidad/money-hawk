@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Net.Text;
 
 namespace MoneyHawk.Core
 {
@@ -20,7 +21,7 @@ namespace MoneyHawk.Core
     public class Receipts
     {
         readonly MoneyBirdClient client;
-        const string extension = "json";
+        const string format = "json";
 
         public Receipts(MoneyBirdClient client)
         {
@@ -30,8 +31,23 @@ namespace MoneyHawk.Core
         //documents/receipts	GET	Get receipts
         public async Task<IEnumerable<Receipt>> GetAll()
         {
-            var incomingInvoices = await client.GetAsync<Receipt[]>("documents/receipts." + extension);
+            var incomingInvoices = await client.GetAsync<Receipt[]>("documents/receipts." + format);
             return incomingInvoices.Body.ToArray();
+        }
+
+        //https://moneybird.com/api/v2/178215432957724585/documents/receipts.json?filter=period:201501..201512
+        public async Task<IEnumerable<Receipt>> Filter(DateTime start, DateTime end)
+        {
+            var url = $"documents/receipts.{format}?filter=period:{start:yyyyMM}..{end:yyyyMM}";
+            var invoices = new List<Receipt>();
+            Result<Receipt[]> result;
+            do
+            {
+                result = await client.GetAsync<Receipt[]>(url);
+                invoices.AddRange(result.Body);
+            }
+            while ((url = result.Next).HasValue());
+            return invoices;
         }
     }
 }

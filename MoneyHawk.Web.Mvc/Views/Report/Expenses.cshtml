@@ -1,7 +1,8 @@
 ﻿@using MoneyHawk.Web.Controllers
+@using MoneyHawk.Web.Models
 @using Net.System
 @using Net.Web
-@model List<ExpenseReportLine>
+@model List<MoneyHawk.Web.Models.ExpenseLineWithRelations>
 
 @{
     ViewBag.Title = "Expense report";
@@ -9,7 +10,7 @@
   }
 
 @{
-    var grid = new WebGrid<ExpenseReportLine>(source:Model, rowsPerPage:200);     
+    var grid = new WebGrid<ExpenseLineWithRelations>(source:Model, rowsPerPage:200);     
 }
 
 <div id="grid">
@@ -18,7 +19,7 @@
         headerStyle: "head",
         alternatingRowStyle: "alt",
         columns: grid.Columns(
-                    grid.Col("InvoiceDate", "Datum", line => line.InvoiceDate.To<string>("d")),
+                    grid.Col("InvoiceDate", "Datum", line => line.Line.InvoiceDate.To<string>("d")),
                     grid.Col("Description", "Naam", line => line.Description),
                     grid.Col("Price Inc", "incl btw", line => line.TotalPriceInclTax.To<string>("0.00")),
                     grid.Col("Tax", "%", line => line.Tax.To<string>("0 %")),
