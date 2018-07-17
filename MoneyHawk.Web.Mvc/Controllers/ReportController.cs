@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -144,7 +145,7 @@ namespace MoneyHawk.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Export(DateTime start, DateTime end)
+        public async Task<ActionResult> Export(DateTime start, DateTime end, string name = "Export")
         {
             using (var excelPackage = new ExcelPackage())
             {
@@ -192,7 +193,7 @@ namespace MoneyHawk.Web.Controllers
                 }
 */
 
-                return File(excelPackage.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+                return File(excelPackage.GetAsByteArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{name}.xlsx");
             }
         }
 

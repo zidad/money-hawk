@@ -21,14 +21,14 @@
                     var quarterStartMonth = quarterEndMonth - 2;
                     var quarterStartDate = new DateTime(year, quarterStartMonth, 1);
                     var quarterEndDate = new DateTime(year, quarterEndMonth, DateTime.DaysInMonth(year, quarterEndMonth));
-                    <li>@Html.ActionLink($"Q{quarter} ({quarterStartDate:MMM} t/m {quarterEndDate:MMM})", "Export", new { start = quarterStartDate, end = quarterEndDate })
+                    <li>@Html.ActionLink($"Q{quarter} ({quarterStartDate:MMM} t/m {quarterEndDate:MMM})", "Export", new { start = quarterStartDate, end = quarterEndDate, name=$"{year}-Q{quarter}" })
             
                         <ul>
                             @for (int month = quarterStartMonth; month <= quarterEndMonth; month++)
                             {
                                 var monthStartDate = new DateTime(year, month, 1);
-                                var monthEndDAte = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-                                <li>@Html.ActionLink(monthStartDate.ToString("MMM"), "Export", new {startDate = monthStartDate, endDate = monthEndDAte})</li>
+                                var monthEndDate = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                                <li>@Html.ActionLink(monthStartDate.ToString("MMM"), "Export", new {startDate = monthStartDate, endDate = monthEndDate, name = $"{year}-{month}"})</li>
                             }
                         </ul>
                     
