@@ -17,7 +17,7 @@ namespace MoneyHawk.Web.Controllers
     {
         readonly IMoneyBirdClient client;
 
-        public ReportController(MoneyBirdClient client)
+        public ReportController(IMoneyBirdClient client)
         {
             this.client = client;
         }
@@ -98,8 +98,8 @@ namespace MoneyHawk.Web.Controllers
                         CustomerName = i.Invoice.Contact.CompanyName,
                         TotalPriceExclTax = i.Line.TotalPriceExclTaxWithDiscount,
                         TaxPercentage = i.Tax.Percentage,
-                        TotalPriceInclTax = i.Line.TotalPriceExclTaxWithDiscount + ((i.Tax.Percentage * i.Line.TotalPriceExclTaxWithDiscount)*0.01m),
-                        TotalTax = ((i.Tax.Percentage * i.Line.TotalPriceExclTaxWithDiscount) * 0.01m),
+                        TotalPriceInclTax = i.Line.TotalPriceExclTaxWithDiscount + (i.Tax.Percentage * i.Line.TotalPriceExclTaxWithDiscount)*0.01m,
+                        TotalTax = i.Tax.Percentage * i.Line.TotalPriceExclTaxWithDiscount * 0.01m,
                         Paid = i.Invoice.State
                     });
         }

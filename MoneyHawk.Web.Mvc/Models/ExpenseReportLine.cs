@@ -27,7 +27,7 @@ namespace MoneyHawk.Web.Controllers
         [DisplayName("soort")]
         public string Kind1 { get; set; }
 
-        [DisplayName("soort")]
+        [DisplayName("soort 2")]
         public string Kind2 { get; set; }
 
         [DisplayName("factuurnummer")]
@@ -36,7 +36,7 @@ namespace MoneyHawk.Web.Controllers
         [DisplayName("contact nr")]
         public long ContactId { get; set; }
 
-        [DisplayName("contact naa")]
+        [DisplayName("contact naam")]
         public string Contact { get; set; }
 
         [DisplayName("grootboekrekening")]

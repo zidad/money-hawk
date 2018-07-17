@@ -11,7 +11,7 @@ namespace MoneyHawk.Web.Controllers
     {
         readonly IMoneyBirdClient moneybird;
 
-        public LedgerAccountController(MoneyBirdClient moneybird)
+        public LedgerAccountController(IMoneyBirdClient moneybird)
         {
             this.moneybird = moneybird;
         }

@@ -2,7 +2,7 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Income/";
+    ViewBag.Title = "Reports";
 }
 
 <h2>Dates</h2>
@@ -13,12 +13,26 @@
     {
         <li>
             @Html.ActionLink(year.To<string>(), "Export", new { start = new DateTime(year, 1, 1), end = new DateTime(year, 12, 31) })
+            
             <ul>
-                @for (int month = 1; month <= 12; month++)
+                @for (int quarter = 1; quarter <= 4; quarter++)
                 {
-                    var start = new DateTime(year, month, 1);
-                    var end = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-                    <li>@Html.ActionLink(start.ToString("MMM"), "Export", new { start, end })</li>
+                    var quarterEndMonth = quarter * 3;
+                    var quarterStartMonth = quarterEndMonth - 2;
+                    var quarterStartDate = new DateTime(year, quarterStartMonth, 1);
+                    var quarterEndDate = new DateTime(year, quarterEndMonth, DateTime.DaysInMonth(year, quarterEndMonth));
+                    <li>@Html.ActionLink($"Q{quarter} ({quarterStartDate:MMM} t/m {quarterEndDate:MMM})", "Export", new { start = quarterStartDate, end = quarterEndDate })
+            
+                        <ul>
+                            @for (int month = quarterStartMonth; month <= quarterEndMonth; month++)
+                            {
+                                var monthStartDate = new DateTime(year, month, 1);
+                                var monthEndDAte = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                                <li>@Html.ActionLink(monthStartDate.ToString("MMM"), "Export", new {startDate = monthStartDate, endDate = monthEndDAte})</li>
+                            }
+                        </ul>
+                    
+                    </li>
                 }
             </ul>
         </li>
